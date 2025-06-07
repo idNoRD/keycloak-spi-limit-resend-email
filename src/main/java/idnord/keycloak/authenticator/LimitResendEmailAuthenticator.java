@@ -10,16 +10,16 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
 @Slf4j
-public class LimitResendEmailVerificationAuthenticator implements Authenticator {
+public class LimitResendEmailAuthenticator implements Authenticator {
 
-    private static final String ATTR_FOR_LIMIT_RESEND_EMAIL_VERIFICATION_COUNT = "LimitResendEmailVerificationCount";
-    private static final String ATTR_FOR_LIMIT_RESEND_EMAIL_VERIFICATION_LAST_TIME = "LimitResendEmailVerificationLastTime";
-    private final int LIMIT_RESEND_EMAIL_VERIFICATION_MAX_RETRIES;
-    private final int LIMIT_RESEND_EMAIL_VERIFICATION_BLOCK_DURATION_SECONDS;
+    private static final String ATTR_FOR_LIMIT_RESEND_EMAIL_COUNT = "LimitResendEmailCount";
+    private static final String ATTR_FOR_LIMIT_RESEND_EMAIL_LAST_TIME = "LimitResendEmailLastTime";
+    private final int LIMIT_RESEND_EMAIL_MAX_RETRIES;
+    private final int LIMIT_RESEND_EMAIL_BLOCK_DURATION_SECONDS;
 
-    public LimitResendEmailVerificationAuthenticator(Configuration configuration) {
-        this.LIMIT_RESEND_EMAIL_VERIFICATION_MAX_RETRIES = configuration.getLimitResendEmailVerificationMaxRetries();
-        this.LIMIT_RESEND_EMAIL_VERIFICATION_BLOCK_DURATION_SECONDS = configuration.getLimitResendEmailVerificationRetryBlockDurationInSec();
+    public LimitResendEmailAuthenticator(Configuration configuration) {
+        this.LIMIT_RESEND_EMAIL_MAX_RETRIES = configuration.getLimitResendEmailMaxRetries();
+        this.LIMIT_RESEND_EMAIL_BLOCK_DURATION_SECONDS = configuration.getLimitResendEmailRetryBlockDurationInSec();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class LimitResendEmailVerificationAuthenticator implements Authenticator 
         long lastTime = 0;
 
         try {
-            String countAttr = user.getFirstAttribute(ATTR_FOR_LIMIT_RESEND_EMAIL_VERIFICATION_COUNT);
+            String countAttr = user.getFirstAttribute(ATTR_FOR_LIMIT_RESEND_EMAIL_COUNT);
             if (countAttr != null) {
                 count = Integer.parseInt(countAttr);
             }
@@ -37,19 +37,19 @@ public class LimitResendEmailVerificationAuthenticator implements Authenticator 
         }
 
         try {
-            String lastTimeAttr = user.getFirstAttribute(ATTR_FOR_LIMIT_RESEND_EMAIL_VERIFICATION_LAST_TIME);
+            String lastTimeAttr = user.getFirstAttribute(ATTR_FOR_LIMIT_RESEND_EMAIL_LAST_TIME);
             if (lastTimeAttr != null) {
                 lastTime = Long.parseLong(lastTimeAttr);
             }
         } catch (Exception ignored) {
         }
 
-        if (count < LIMIT_RESEND_EMAIL_VERIFICATION_MAX_RETRIES) {
+        if (count < LIMIT_RESEND_EMAIL_MAX_RETRIES) {
             context.success();
         } else {
             long now = System.currentTimeMillis() / 1000; // current time in seconds
-            // If last resend was more than 1 hour ago, reset count
-            if (now - lastTime > LIMIT_RESEND_EMAIL_VERIFICATION_BLOCK_DURATION_SECONDS) {
+            // If last resend was more than X sec ago, reset count
+            if (now - lastTime > LIMIT_RESEND_EMAIL_BLOCK_DURATION_SECONDS) {
                 context.success();
             } else {
                 context.failure(AuthenticationFlowError.USER_TEMPORARILY_DISABLED);

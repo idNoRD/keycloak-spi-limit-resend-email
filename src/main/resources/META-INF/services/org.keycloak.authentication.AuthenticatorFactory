@@ -1,1 +1,1 @@
-idnord.keycloak.authenticator.LimitResendEmailVerificationAuthenticatorFactory
+idnord.keycloak.authenticator.LimitResendEmailAuthenticatorFactory

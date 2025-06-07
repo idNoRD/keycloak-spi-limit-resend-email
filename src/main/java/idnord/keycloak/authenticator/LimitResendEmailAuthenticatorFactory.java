@@ -13,11 +13,11 @@ import org.keycloak.provider.ProviderConfigProperty;
 import java.util.List;
 
 @Slf4j
-public class LimitResendEmailVerificationAuthenticatorFactory implements AuthenticatorFactory {
+public class LimitResendEmailAuthenticatorFactory implements AuthenticatorFactory {
 
-    public static final String PROVIDER_ID = "limit-resend-email-verification-auth";
+    public static final String PROVIDER_ID = "limit-resend-email-authenticator";
 
-    private static final Authenticator SINGLETON = new LimitResendEmailVerificationAuthenticator(Configuration.loadFromEnv());
+    private static final Authenticator SINGLETON = new LimitResendEmailAuthenticator(Configuration.loadFromEnv());
 
     @Override
     public Authenticator create(KeycloakSession session) {
@@ -26,7 +26,7 @@ public class LimitResendEmailVerificationAuthenticatorFactory implements Authent
 
     @Override
     public String getDisplayType() {
-        return "LimitResendEmailVerification Authenticator";
+        return "LimitResendEmail Authenticator";
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LimitResendEmailVerificationAuthenticatorFactory implements Authent
 
     @Override
     public String getHelpText() {
-        return "Blocks access to the email verification step if resend attempts exceed a configured limit.";
+        return "Blocks keycloak from sending emails if attempts like forgot password and resend email verify exceed a configured limit.";
     }
 
     @Override

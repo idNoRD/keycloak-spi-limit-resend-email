@@ -10,23 +10,23 @@ import org.keycloak.models.KeycloakSessionFactory;
 
 @AutoService(EventListenerProviderFactory.class)
 @Slf4j
-public class LimitResendEmailVerificationLastTimeAndCountListenerFactory implements EventListenerProviderFactory {
+public class LimitResendEmailLastTimeAndCountListenerFactory implements EventListenerProviderFactory {
 
-    public static final String PROVIDER_ID = "limit-resend-email-verification-evnt";
+    public static final String PROVIDER_ID = "limit-resend-email-event";
 
     static String attributeNameForTime;
     static String attributeNameForCount;
 
     @Override
     public EventListenerProvider create(KeycloakSession session) {
-        return new LimitResendEmailVerificationLastTimeAndCountListener(session);
+        return new LimitResendEmailLastTimeAndCountListener(session);
     }
 
     @Override
     public void init(Config.Scope config) {
         // We use our own configuration as I don't want to mess around with XML from two thousand years ago
-        attributeNameForTime = config.get("attribute-name-for-time", "LimitResendEmailVerificationLastTime");
-        attributeNameForCount = config.get("attribute-name-for-count", "LimitResendEmailVerificationCount");
+        attributeNameForTime = config.get("attribute-name-for-time", "LimitResendEmailLastTime");
+        attributeNameForCount = config.get("attribute-name-for-count", "LimitResendEmailCount");
     }
 
     @Override

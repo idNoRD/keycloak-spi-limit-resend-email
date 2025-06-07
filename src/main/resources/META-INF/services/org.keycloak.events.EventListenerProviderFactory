@@ -1,1 +1,1 @@
-idnord.keycloak.provider.LimitResendEmailVerificationLastTimeAndCountListenerFactory
+idnord.keycloak.provider.LimitResendEmailLastTimeAndCountListenerFactory

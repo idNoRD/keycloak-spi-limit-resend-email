@@ -12,7 +12,7 @@ import org.keycloak.models.UserModel;
 
 @Slf4j
 @RequiredArgsConstructor
-public class LimitResendEmailVerificationLastTimeAndCountListener implements EventListenerProvider {
+public class LimitResendEmailLastTimeAndCountListener implements EventListenerProvider {
 
     private final KeycloakSession session;
 
@@ -22,9 +22,9 @@ public class LimitResendEmailVerificationLastTimeAndCountListener implements Eve
         if (event.getType().equals(EventType.SEND_VERIFY_EMAIL)) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
-                user.setSingleAttribute(LimitResendEmailVerificationLastTimeAndCountListenerFactory.attributeNameForTime, Integer.toString(Time.currentTime()));
+                user.setSingleAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForTime, Integer.toString(Time.currentTime()));
                 //
-                String attributeNameForCount = LimitResendEmailVerificationLastTimeAndCountListenerFactory.attributeNameForCount;
+                String attributeNameForCount = LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForCount;
                 int count = 0;
                 try {
                     count = Integer.parseInt(user.getFirstAttribute(attributeNameForCount));
@@ -41,8 +41,8 @@ public class LimitResendEmailVerificationLastTimeAndCountListener implements Eve
         if (event.getType() == EventType.VERIFY_EMAIL) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
-                user.removeAttribute(LimitResendEmailVerificationLastTimeAndCountListenerFactory.attributeNameForCount);
-                user.removeAttribute(LimitResendEmailVerificationLastTimeAndCountListenerFactory.attributeNameForTime);
+                user.removeAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForCount);
+                user.removeAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForTime);
                 log.info("Email verified for user {}, resend count reset", user.getUsername());
             }
         }

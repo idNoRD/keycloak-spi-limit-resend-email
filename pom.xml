@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>idnord.keycloak</groupId>
-    <artifactId>keycloak-spi-limit-resend-email-verification</artifactId>
+    <artifactId>keycloak-spi-limit-resend-email</artifactId>
     <packaging>jar</packaging>
     <version>1.1</version>
-    <name>keycloak-spi-limit-resend-email-verification</name>
+    <name>keycloak-spi-limit-resend-email</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

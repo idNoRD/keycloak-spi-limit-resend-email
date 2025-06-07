@@ -1,5 +1,5 @@
-# keycloak-spi-limit-resend-email-verification
-Keycloak spi that limits resend email verification https://github.com/keycloak/keycloak/issues/19234
+# keycloak-spi-limit-resend-email
+Keycloak spi that limits resend email verification and forgot password emails https://github.com/keycloak/keycloak/issues/19234
 
 ## Notice:
 This repository is under active development and not yet ready for production
@@ -12,9 +12,9 @@ This repository is under active development and not yet ready for production
 - (Problem that we solve): User can spam Forgot password emails by clicking Forgot password
 - (Solution) We show error because we sent more than 5 (email-verification emails that weren't confirmed or password reset emails) during last hour
 - (Configuration): 
-  - "Reset credentials flow" copied and "LimitResendEmailVerification Authenticator" with "Required" was inserted before "Send Resend Email"
+  - "Reset credentials flow" copied and "LimitResendEmail Authenticator" with "Required" was inserted before "Send Resend Email"
   - Open copy of "Reset credentials flow" and bind with "Reset credentials flow"
-  - Realm Settings -> Events -> Event listeners -> add limit-resend-email-verification-evnt
+  - Realm Settings -> Events -> Event listeners -> add limit-resend-email-event
 ## Feature #2 (Login protection):
 - After user registration we show Email confirmation page with Resend link, User clicks Resend link more than 5 times, User didn't open any emails and didn't confirm his email
 - **User opens Login and enters correct login and password**
@@ -49,7 +49,7 @@ mvn clean package
 
 ### 2. Ensure JAR includes necessary META-INF services
 ```bash
-jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email-verification.jar | grep META-INF/services/
+jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email.jar | grep META-INF/services/
 ```
 Expected services:  
 (IMPORTANT: if you see more than this list of services in jar it means that a dependency in pom.xml needs scope `<scope>provided</scope>`)
@@ -63,8 +63,8 @@ META-INF/services/org.keycloak.events.EventListenerProviderFactory
 ### 5. Restart Keycloak
 ### 6. Adjust settings
 ```text
-KEYCLOAK_LIMIT_RESEND_EMAIL_VERIFICATION_MAX_RETRIES = 3
-KEYCLOAK_LIMIT_RESEND_EMAIL_VERIFICATION_RETRY_BLOCK_DURATION_IN_SEC = 3600
+KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES = 3
+KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC = 3600
 ```
 
 ---
@@ -82,7 +82,7 @@ Spin up local keycloak
 mvn clean package
 ```
 ```bash
-jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email-verification.jar | grep META-INF/services/
+jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email.jar | grep META-INF/services/
 ```
 Upload spi into local keycloak, build and restart
 ```bash
