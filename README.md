@@ -26,18 +26,20 @@ These extensions are designed to enhance the login flow and event tracking featu
 ## 🛠 Installation
 
 ### 1. Build the JAR
-```text
+```bash
 mvn clean package
 ```
 
 ### 2. Ensure JAR includes necessary META-INF services
 ```bash
-jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email-verification.jar | grep META-INF/services/org.keycloak.
+jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email-verification.jar | grep META-INF/services/
 ```
-Expected services:
+Expected services:  
+(IMPORTANT: if you see more than this list of services in jar it means that a dependency in pom.xml needs scope `<scope>provided</scope>`)
 ```text
-META-INF/services/org.keycloak.authentication.AuthenticatorFactory  
-META-INF/services/org.keycloak.events.EventListenerProviderFactory  
+META-INF/services/
+META-INF/services/org.keycloak.authentication.AuthenticatorFactory
+META-INF/services/org.keycloak.events.EventListenerProviderFactory
 ```
 ### 3. Copy jar to /opt/keycloak/providers/
 ### 4. Rebuild Keycloak
@@ -56,6 +58,12 @@ docker compose rm -f -s -v keycloak
 Spin up local keycloak
 ```bash
  docker compose up
+```
+```bash
+mvn clean package
+```
+```bash
+jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email-verification.jar | grep META-INF/services/
 ```
 Upload spi into local keycloak, build and restart
 ```bash
