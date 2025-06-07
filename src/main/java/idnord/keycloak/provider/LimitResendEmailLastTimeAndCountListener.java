@@ -18,8 +18,7 @@ public class LimitResendEmailLastTimeAndCountListener implements EventListenerPr
 
     @Override
     public void onEvent(Event event) {
-        //@TODO add Forgot Password action
-        if (event.getType().equals(EventType.SEND_VERIFY_EMAIL)) {
+        if (event.getType().equals(EventType.SEND_VERIFY_EMAIL) || event.getType().equals(EventType.SEND_RESET_PASSWORD)) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
                 user.setSingleAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForTime, Integer.toString(Time.currentTime()));
@@ -37,8 +36,8 @@ public class LimitResendEmailLastTimeAndCountListener implements EventListenerPr
             }
         }
 
-        // Reset counter on successful verification
-        if (event.getType() == EventType.VERIFY_EMAIL) {
+        // Reset counter on successful email verification or successful password reset
+        if (event.getType() == EventType.VERIFY_EMAIL || event.getType() == EventType.UPDATE_PASSWORD) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
                 user.removeAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForCount);
