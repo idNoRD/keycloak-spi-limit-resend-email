@@ -4,6 +4,32 @@ Keycloak spi that limits resend email verification https://github.com/keycloak/k
 ## Notice:
 This repository is under active development and not yet ready for production
 
+## ✨ Features
+
+## Feature #1 (Forgot password protection):
+- After user registration we show Email confirmation page with Resend link, User clicks Resend link more than 5 times, User didn't open any emails and didn't confirm his email
+- **User opens Login and clicks "Forgot password"**
+- (Problem that we solve): User can spam Forgot password emails by clicking Forgot password
+- (Solution) We show error because we sent more than 5 (email-verification emails that weren't confirmed or password reset emails) during last hour
+- (Configuration): 
+  - "Reset credentials flow" copied and "LimitResendEmailVerification Authenticator" with "Required" was inserted before "Send Resend Email"
+  - Open copy of "Reset credentials flow" and bind with "Reset credentials flow"
+  - Realm Settings -> Events -> Event listeners -> add limit-resend-email-verification-evnt
+## Feature #2 (Login protection):
+- After user registration we show Email confirmation page with Resend link, User clicks Resend link more than 5 times, User didn't open any emails and didn't confirm his email
+- **User opens Login and enters correct login and password**
+- Keycloak opens Verification Page and sends Email-verification email
+- (Problem that we solve): User can spam Email-verification emails by logging-in without email confirmations
+- (Solution): @TODO
+- (Configuration): @TODO
+## Feature #3 (Email verification page protection)
+- After user registration we show Email confirmation page with Resend link, User clicks Resend link more than 5 times, User didn't open any emails and didn't confirm his email
+- (Problem that we solve): User can spam Email-verification emails by clicking Resend link many times
+- (Solution): @TODO
+- (Configuration): @TODO
+
+---
+
 # Keycloak Custom SPI Extensions
 
 This repository contains custom [Keycloak](https://www.keycloak.org/) Service Provider Interfaces (SPI) for:
@@ -11,15 +37,6 @@ This repository contains custom [Keycloak](https://www.keycloak.org/) Service Pr
 - Custom **EventListener**
 
 These extensions are designed to enhance the login flow and event tracking features of Keycloak.
-
----
-
-## ✨ Features
-
-- 🔐 Block excessive email verification resends with time-based rate limiting
-- 🛠 Track and reset resend counts upon successful verification
-- 📢 Listen to Keycloak events (e.g., `SEND_VERIFY_EMAIL`, `VERIFY_EMAIL`) and persist user metadata
-- ♻️ Integrated with Keycloak's flexible authentication flow system
 
 ---
 
@@ -50,6 +67,8 @@ KEYCLOAK_LIMIT_RESEND_EMAIL_VERIFICATION_MAX_RETRIES = 3
 KEYCLOAK_LIMIT_RESEND_EMAIL_VERIFICATION_RETRY_BLOCK_DURATION_IN_SEC = 3600
 ```
 
+---
+
 ## Development Notes
 Destroy local keycloak
 ```bash
@@ -69,6 +88,8 @@ Upload spi into local keycloak, build and restart
 ```bash
 ./install.sh
 ```
+
+---
 
 # License
 MIT

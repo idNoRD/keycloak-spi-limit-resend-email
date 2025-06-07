@@ -18,6 +18,7 @@ public class LimitResendEmailVerificationLastTimeAndCountListener implements Eve
 
     @Override
     public void onEvent(Event event) {
+        //@TODO add Forgot Password action
         if (event.getType().equals(EventType.SEND_VERIFY_EMAIL)) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
