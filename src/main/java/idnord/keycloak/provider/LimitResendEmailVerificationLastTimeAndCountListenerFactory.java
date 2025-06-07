@@ -12,7 +12,7 @@ import org.keycloak.models.KeycloakSessionFactory;
 @Slf4j
 public class LimitResendEmailVerificationLastTimeAndCountListenerFactory implements EventListenerProviderFactory {
 
-    public static final String PROVIDER_ID = "limit-resend-email-verification-last-time-and-count";
+    public static final String PROVIDER_ID = "limit-resend-email-verification-evnt";
 
     static String attributeNameForTime;
     static String attributeNameForCount;

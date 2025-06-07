@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class LimitResendEmailVerificationAuthenticatorFactory implements AuthenticatorFactory {
 
-    public static final String PROVIDER_ID = "limit-resend-email-verification-authenticator";
+    public static final String PROVIDER_ID = "limit-resend-email-verification-auth";
 
     private static final Authenticator SINGLETON = new LimitResendEmailVerificationAuthenticator(Configuration.loadFromEnv());
 
