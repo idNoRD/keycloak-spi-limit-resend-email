@@ -48,7 +48,7 @@ To see attributes of a user in keycloak
   The user clicks "Resend" more than 3 times but does not open or confirm any of the emails.
 - **User then opens the Login page and clicks "Forgot password".**
 - **(Problem we solve):** The user can abuse the system by repeatedly triggering "Forgot password", spamming password reset emails.
-- **(Solution):** If more than 3 verification or reset emails were sent within the last hour and none were confirmed, an error is shown to block further emails.
+- **(Solution):** If more than 3 verification or forgot password emails were sent within the last hour and none were confirmed, an error is shown to block further emails.  
 
 ## Feature #2 (Login protection):
 
@@ -57,14 +57,17 @@ To see attributes of a user in keycloak
 - **User then opens the Login page and enters the correct username and password.**
 - Keycloak redirects to the Verification page and sends a new email verification email.
 - **(Problem we solve):** The user can repeatedly log in to trigger email-verification emails without confirming any, leading to spam.
-- **(Solution):** If the limit is reached, the Verification page shows an error and no email is sent.
+- **(Solution):** If the limit is reached, the Verification page shows an error and no email is sent during 1 hour.
 
 ## Feature #3 (Email verification page protection)
 
 - After registration, the user is shown the Email Verification page with a "Resend" link.  
   The user clicks "Resend" more than 3 times without confirming any emails.
 - **(Problem we solve):** The user can trigger excessive email-verification messages by repeatedly clicking "Resend".
-- **(Solution):** If the resend limit is reached, the page shows an error and no email is sent.
+- **(Solution):** If the resend limit is reached, the page shows an error and no email is sent during 1 hour.
+
+> If all email verification links have expired (increase recommended to 30 minutes instead of default 5) and the user forgot password then user selects "Forgot Password," and request a reset password email after 1 hour.
+> Resetting the password does not automatically verify the email. After logging in with the new password, the user will still see the email verification page, and a new verification email will be sent.
 
 ---
 
