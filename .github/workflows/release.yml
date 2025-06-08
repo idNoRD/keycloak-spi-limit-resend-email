@@ -27,7 +27,7 @@ jobs:
         run: mvn versions:set -DnewVersion=${GITHUB_REF_NAME}
 
       - name: Build
-        run: mvn clean package -DskipTests
+        run: mvn -B -q clean package -DskipTests
 
       - name: Get artifact info
         id: artifact
@@ -57,6 +57,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0  # Ensure full history for versioning
+          ref: main
 
       - name: Set up JDK
         uses: actions/setup-java@v4
