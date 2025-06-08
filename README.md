@@ -1,5 +1,12 @@
 # keycloak-spi-limit-resend-email
-Keycloak spi that limits resend email verification and forgot password emails https://github.com/keycloak/keycloak/issues/19234
+Keycloak spi that 
+- limits resend email verification 
+([#192341](https://github.com/keycloak/keycloak/issues/19234), 
+ [#24558](https://github.com/keycloak/keycloak/issues/24558))
+- limits forgot password emails
+([#24914](https://github.com/keycloak/keycloak/issues/24914), 
+[#26182](https://github.com/keycloak/keycloak/issues/26182), 
+[#16574](https://github.com/keycloak/keycloak/issues/16574))
 
 ## Notice:
 This repository is under active development and not yet ready for production
