@@ -3,6 +3,7 @@ package idnord.keycloak.provider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.common.util.Time;
+import org.keycloak.events.Details;
 import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.EventType;
@@ -18,7 +19,8 @@ public class LimitResendEmailLastTimeAndCountListener implements EventListenerPr
 
     @Override
     public void onEvent(Event event) {
-        if (event.getType().equals(EventType.SEND_VERIFY_EMAIL) || event.getType().equals(EventType.SEND_RESET_PASSWORD)) {
+        if (event.getType().equals(EventType.SEND_VERIFY_EMAIL)
+                || event.getType().equals(EventType.SEND_RESET_PASSWORD)) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
                 user.setSingleAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForTime, Integer.toString(Time.currentTime()));
@@ -32,12 +34,13 @@ public class LimitResendEmailLastTimeAndCountListener implements EventListenerPr
                 if (count < Integer.MAX_VALUE) {
                     user.setSingleAttribute(attributeNameForCount, Integer.toString(count + 1));
                 }
-                log.info("SEND_VERIFY_EMAIL triggered for user {}, count now: {}", user.getUsername(), count);
+                log.info("{} triggered for user {}, count now: {}", event.getType(), user.getUsername(), count);
             }
         }
 
         // Reset counter on successful email verification or successful password reset
-        if (event.getType() == EventType.VERIFY_EMAIL || event.getType() == EventType.UPDATE_PASSWORD) {
+        if (event.getType() == EventType.VERIFY_EMAIL
+                || (event.getType() == EventType.UPDATE_CREDENTIAL && "password".equalsIgnoreCase(event.getDetails().get(Details.CREDENTIAL_TYPE)))) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
                 user.removeAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForCount);

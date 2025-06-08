@@ -11,5 +11,5 @@ docker cp target/idnord*.jar "keycloak:${KC_DIR}/providers/"
 docker exec keycloak sh -c "${KC_DIR}/bin/kc.sh build"
 
 # Restart the keycloak container to apply changes
-docker restart keycloak
+#docker restart keycloak
 

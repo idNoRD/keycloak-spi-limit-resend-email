@@ -20,21 +20,27 @@ This repository is under active development and not yet ready for production
 - **User opens Login and enters correct login and password**
 - Keycloak opens Verification Page and sends Email-verification email
 - (Problem that we solve): User can spam Email-verification emails by logging-in without email confirmations
-- (Solution): @TODO
-- (Configuration): @TODO
+- (Solution): Verification email page shows error if limit was reached
+- (Configuration):
+  - Realm Settings -> Events -> limit-resend-email-event
+  - Authentication -> Required actions -> Ensure that Verify Email is enabled and set default action is On
+
 ## Feature #3 (Email verification page protection)
 - After user registration we show Email confirmation page with Resend link, User clicks Resend link more than 5 times, User didn't open any emails and didn't confirm his email
 - (Problem that we solve): User can spam Email-verification emails by clicking Resend link many times
-- (Solution): @TODO
-- (Configuration): @TODO
+- (Solution): Verification email page shows error if limit was reached
+- (Configuration): 
+  - Realm Settings -> Events -> limit-resend-email-event
+  - Authentication -> Required actions -> Ensure that Verify Email is enabled and set default action is On
 
 ---
 
 # Keycloak Custom SPI Extensions
 
 This repository contains custom [Keycloak](https://www.keycloak.org/) Service Provider Interfaces (SPI) for:
-- Custom **Authenticator**
-- Custom **EventListener**
+- Custom **Authenticator** for blocking sending emails after many Forgot Password clicks 
+- Custom **EventListener** for counting how many times user clicked Forgot Password or Resend verification email 
+- Custom **VerifyEmail** that overrides "existing VerifyEmail Required Action" for blocking sending emails after many resend clicks or many logins with unverified email
 
 These extensions are designed to enhance the login flow and event tracking features of Keycloak.
 
@@ -56,6 +62,7 @@ Expected services:
 ```text
 META-INF/services/
 META-INF/services/org.keycloak.authentication.AuthenticatorFactory
+META-INF/services/org.keycloak.authentication.RequiredActionFactory
 META-INF/services/org.keycloak.events.EventListenerProviderFactory
 ```
 ### 3. Copy jar to /opt/keycloak/providers/
@@ -88,6 +95,12 @@ Upload spi into local keycloak, build and restart
 ```bash
 ./install.sh
 ```
+
+To see attributes of a user in keycloak 
+- Realm settings
+  - General
+    - Unmanaged Attributes
+      - set `Only administrators can view`
 
 ---
 

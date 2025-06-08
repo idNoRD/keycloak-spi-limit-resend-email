@@ -1,6 +1,8 @@
 package idnord.keycloak.provider;
 
 import com.google.auto.service.AutoService;
+import idnord.keycloak.LimitResendEmailCore;
+import idnord.keycloak.config.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.Config;
 import org.keycloak.events.EventListenerProvider;
@@ -24,9 +26,8 @@ public class LimitResendEmailLastTimeAndCountListenerFactory implements EventLis
 
     @Override
     public void init(Config.Scope config) {
-        // We use our own configuration as I don't want to mess around with XML from two thousand years ago
-        attributeNameForTime = config.get("attribute-name-for-time", "LimitResendEmailLastTime");
-        attributeNameForCount = config.get("attribute-name-for-count", "LimitResendEmailCount");
+        attributeNameForTime = config.get("attribute-name-for-time", LimitResendEmailCore.ATTR_FOR_LIMIT_RESEND_EMAIL_LAST_TIME);
+        attributeNameForCount = config.get("attribute-name-for-count", LimitResendEmailCore.ATTR_FOR_LIMIT_RESEND_EMAIL_COUNT);
     }
 
     @Override

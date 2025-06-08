@@ -1,24 +1,18 @@
 package idnord.keycloak.config;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.util.Optional;
 
 @Getter
 @ToString
+@RequiredArgsConstructor
 public class Configuration {
 
     private final int limitResendEmailMaxRetries; // The maximum number of retries of email before blocking
     private final int limitResendEmailRetryBlockDurationInSec; // The base back-off time in seconds.
-
-    private Configuration(
-            final int limitResendEmailMaxRetries,
-            final int limitResendEmailRetryBlockDurationInSec
-    ) {
-        this.limitResendEmailMaxRetries = limitResendEmailMaxRetries;
-        this.limitResendEmailRetryBlockDurationInSec = limitResendEmailRetryBlockDurationInSec;
-    }
 
     /**
      * Loads the configuration using the systems environment variables
