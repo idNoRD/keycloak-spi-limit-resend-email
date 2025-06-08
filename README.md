@@ -69,7 +69,6 @@ To see attributes of a user in keycloak
 > If all email verification links have expired (increase recommended to 30 minutes instead of default 5) and the user forgot password then user selects "Forgot Password," and request a reset password email after 1 hour.
 > Resetting the password does not automatically verify the email. After logging in with the new password, the user will still see the email verification page, and a new verification email will be sent.
 
-> Not-tested behavior: if user clicks resend or forgot password every 3 hours/days/months/years we still count them and can block email sending for 1 hour after 3 attempts
 ---
 
 # Keycloak Custom SPI Extensions
