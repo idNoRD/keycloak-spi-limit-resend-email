@@ -29,7 +29,8 @@ KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC = 3600
   - authenticator contains limit-resend-email-authenticator
   - required-action contains VERIFY_EMAIL
 - Go to "Realm Settings" of your realm → Events → Event Listeners and add `limit-resend-email-event` and click Save.
-- Go to "Authentication" → "Flows" tab and Duplicate the **"reset credentials"** flow and insert **"LimitResendEmail Authenticator"** (mark as **Required**) before **"Send Reset Email"**.
+- Go to "Authentication" → "Flows" tab and Duplicate the **"reset credentials"** flow and insert **"LimitResendEmail Authenticator"** (mark as **Required**). 
+  - Reorder and Place the **"LimitResendEmail Authenticator"** above **"Send Reset Email"** so that it runs before "Send Reset Email".
 - In your duplicated flow click Action → "Bind flow" to set it as the active **"Reset credentials flow"** .
 - Go to "Authentication" → "Required Actions" tab → Make sure **Verify Email** is enabled and the **Default Action** is set to **On**.
 ### 7. Optional setting
