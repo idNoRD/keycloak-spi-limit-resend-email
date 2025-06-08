@@ -12,8 +12,8 @@ This repository is under active development and not yet ready for production
 - (Problem that we solve): User can spam Forgot password emails by clicking Forgot password
 - (Solution) We show error because we sent more than 5 (email-verification emails that weren't confirmed or password reset emails) during last hour
 - (Configuration): 
-  - "Reset credentials flow" copied and "LimitResendEmail Authenticator" with "Required" was inserted before "Send Resend Email"
-  - Open copy of "Reset credentials flow" and bind with "Reset credentials flow"
+  - Copy "Reset credentials flow" and add "LimitResendEmail Authenticator" with "Required" before "Send Resend Email"
+  - Open copied "Reset credentials flow" and bind with "Reset credentials flow"
   - Realm Settings -> Events -> Event listeners -> add limit-resend-email-event
 ## Feature #2 (Login protection):
 - After user registration we show Email confirmation page with Resend link, User clicks Resend link more than 5 times, User didn't open any emails and didn't confirm his email

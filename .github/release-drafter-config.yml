@@ -1,0 +1,134 @@
+---
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+prerelease: true
+include-pre-releases: true
+categories:
+  - title: 💣 Breaking Changes
+    labels:
+      - breaking change
+  - title: 🔔 Deprecation Warnings
+    labels:
+      - deprecation
+  - title: 🚀 Features
+    labels:
+      - enhancement
+  - title: 🐛 Bug Fixes
+    labels:
+      - bug
+  - title: 🧪 Tests
+    labels:
+      - tests
+  - title: 🔨 Maintenance
+    labels:
+      - chore
+  - title: 👷 CI/CD
+    labels:
+      - ci
+  - title: ⬆️ Dependencies
+    collapse-after: 15
+    labels:
+      - dependencies
+  - title: 📝 Documentation
+    labels:
+      - documentation
+  - title: Other Changes
+    labels:
+      - "*"
+exclude-labels:
+  - skip changelog
+version-resolver:
+  minor:
+    labels:
+      - breaking change
+      - deprecation
+  patch:
+    labels:
+      - bug
+      - ci
+      - chore
+      - dependencies
+      - documentation
+      - enhancement
+      - tests
+  default: patch
+autolabeler:
+  - label: breaking change
+    body:
+      - "/breaking/i"
+    title:
+      - "/breaking/i"
+      - "/^\\w+!/i"
+  - label: deprecation
+    branch:
+      - "/deprecate\/.+/"
+    title:
+      - "/deprecate/i"
+  - label: enhancement
+    branch:
+      - "/feat\/.+/"
+      - "/feature\/.+/"
+    title:
+      - "/feat/i"
+      - "/feature/i"
+  - label: bug
+    branch:
+      - "/fix\/.+/"
+      - "/bug\/.+/"
+      - "/bugfix\/.+/"
+    title:
+      - "/fix/i"
+      - "/bug/i"
+      - "/bugfix/i"
+  - label: tests
+    branch:
+      - "/tests{0,1}\/.+/"
+    files:
+      - "/tests/**"
+    title:
+      - "/tests{0,1}\/.+/i"
+  - label: documentation
+    branch:
+      - "/docs{0,1}\/.+/"
+      - "/documentation\/.+/"
+    files:
+      - "docs/**"
+    title:
+      - "/docs{0,1}\/.+/i"
+      - "/documentation/i"
+  - label: ci
+    branch:
+      - "/ci\/.+/"
+    title:
+      - "/ci/i"
+  - label: chore
+    branch:
+      - "/chore\/.+/"
+      - "/refactor\/.+/"
+      - "/style\/.+/"
+    title:
+      - "/chore/i"
+      - "/refactor/i"
+      - "/style/i"
+replacers:
+  - search: "/(\\w+)(\\(\\w+\\))?!?: /g"
+    replace: ""
+template: |
+  ## What's new in keycloak-spi-limit-resend-email's $RESOLVED_VERSION!
+
+  $CHANGES
+
+  ## Install & Upgrade
+
+  - To install or upgrade the keycloak-spi-limit-resend-email:
+    - copy jar into /opt/keycloak/providers/
+    - run `/bin/kc.sh build`
+    - restart keycloak
+  - To configure:
+    - Copy "Reset credentials flow" and add into it the "LimitResendEmail Authenticator" ("Required") before "Send Resend Email"
+    - Open copied "Reset credentials flow" and bind with "Reset credentials flow"
+    - Realm Settings -> Events -> Event listeners -> add limit-resend-email-event
+    - Authentication -> Required actions -> Ensure that "Verify Email" is enabled and set default action is On
+  - To adjust you can pass these environment variables to keycloak
+    - KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES = 3
+    - KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC = 3600

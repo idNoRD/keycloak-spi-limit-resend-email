@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Upload Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
+
+      - name: Set version from tag
+        run: mvn versions:set -DnewVersion=${GITHUB_REF_NAME}
+
+      - name: Build
+        run: mvn clean package -DskipTests
+
+      - name: Get artifact info
+        id: artifact
+        run: |
+          GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
+          ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          KC_VERSION=$(mvn help:evaluate -Dexpression=keycloak-version -q -DforceStdout)
+
+          FINAL_NAME="${GROUP_ID}-${ARTIFACT_ID}-kc-${KC_VERSION}-b-${VERSION}.jar"
+
+          echo "FINAL_NAME=$FINAL_NAME" >> $GITHUB_ENV
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/${{ env.FINAL_NAME }}
+
+  post-release-bump:
+    name: Post-release version bump
+    runs-on: ubuntu-latest
+    needs: build-and-release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # Ensure full history for versioning
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
+
+      - name: Bump to next snapshot version
+        run: |
+          RELEASE_VERSION=${GITHUB_REF_NAME}
+          BASE_VERSION=$(echo "$RELEASE_VERSION" | sed -E 's/^([0-9]+\.[0-9]+)\..*/\1/')
+          PATCH_VERSION=$(echo "$RELEASE_VERSION" | sed -E 's/^.*\.([0-9]+)$/\1/')
+          NEXT_PATCH=$((PATCH_VERSION + 1))
+          NEXT_VERSION="${BASE_VERSION}.${NEXT_PATCH}-SNAPSHOT"
+          mvn versions:set -DnewVersion=$NEXT_VERSION
+          mvn versions:commit
+
+      - name: Commit and push version bump
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "chore: bump version to $NEXT_VERSION after release"
+          git push origin main
