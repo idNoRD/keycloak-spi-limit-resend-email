@@ -78,7 +78,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.groupId}-${project.artifactId}-kc-${keycloak-version}-b-${version}</finalName>
+        <finalName>${project.groupId}-${project.artifactId}-kc-${keycloak-version}-b-${project.version}</finalName>
 
         <plugins>
             <plugin>
