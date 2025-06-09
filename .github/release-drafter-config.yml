@@ -78,20 +78,20 @@ autolabeler:
     body:
       - "/breaking/i"
     title:
-      - "/^(✨)?\s?(feat|feature)(\([^)]*\))?!:/i" # feat!: or feat!: breaking change
+      - "/^(✨)?\\s?(feat|feature)(\\([^)]*\\))?!:/i" # feat!: or feat!: breaking change
       - "/breaking/i"
-      - "/^\w+!/i"
+      - "/^\\w+!/i"
   - label: deprecation
     title:
       - "/deprecate/i"
   - label: enhancement
     title:
-      - "/^(✨)?\s?(feat|feature)(\([^)]*\))?:/i"
+      - "/^(✨)?\\s?(feat|feature)(\\([^)]*\\))?:/i"
       - "/feat/i"
       - "/feature/i"
   - label: bug
     title:
-      - "/^(🐞)?\s?(style)(\([^)]*\))?:/i"
+      - "/^(🐞)?\\s?(style)(\\([^)]*\\))?:/i"
       - "/fix/i"
       - "/bug/i"
       - "/bugfix/i"
@@ -99,45 +99,45 @@ autolabeler:
     files:
       - "/tests/**"
     title:
-      - "/^(🧪)?\s?(test|tests)(\([^)]*\))?:/i"
+      - "/^(🧪)?\\s?(test|tests)(\\([^)]*\\))?:/i"
       - "/tests{0,1}\/.+/i"
   - label: documentation
     files:
       - "docs/**"
     title:
-      - "/^(📃)?\s?(docs|documentation)(\([^)]*\))?:/i"
+      - "/^(📃)?\\s?(docs|documentation)(\\([^)]*\\))?:/i"
       - "/docs{0,1}\/.+/i"
       - "/documentation/i"
   - label: ci
     title:
-      - "/^(🐎)?\s?(ci)(\([^)]*\))?:/i"
+      - "/^(🐎)?\\s?(ci)(\\([^)]*\\))?:/i"
       - "/ci/i"
   - label: chore
     title:
-      - "/^(🐳)?\s?(chore)(\([^)]*\))?:/i"
+      - "/^(🐳)?\\s?(chore)(\\([^)]*\\))?:/i"
       - "/chore/i"
   - label: style
     title:
-      - "/^(🌈)?\s?(style)(\([^)]*\))?:/i"
+      - "/^(🌈)?\\s?(style)(\\([^)]*\\))?:/i"
       - "/style/i"
   - label: refactor
     title:
-      - "/^(🦄)?\s?(refactor)(\([^)]*\))?:/i"
+      - "/^(🦄)?\\s?(refactor)(\\([^)]*\\))?:/i"
       - "/refactor/i"
   - label: performance
     title:
-      - "/^(🎈)?\s?(perf)(\([^)]*\))?:/i"
+      - "/^(🎈)?\\s?(perf)(\\([^)]*\\))?:/i"
       - "/perf/i"
   - label: build
     title:
-      - "/^(🔧)?\s?(build)(\([^)]*\))?:/i"
+      - "/^(🔧)?\\s?(build)(\\([^)]*\\))?:/i"
       - "/build/i"
   - label: revert
     title:
-      - "/^(↩)?\s?(revert)(\([^)]*\))?:/i"
+      - "/^(↩)?\\s?(revert)(\\([^)]*\\))?:/i"
       - "/revert/i"
 replacers:
-  - search: "/(✨|🐞|📃|🌈|🦄|🎈|🧪|🔧|🐎|🐳|↩)?\s?(\w+)(\(\w+\))?!?: /g"
+  - search: "/(✨|🐞|📃|🌈|🦄|🎈|🧪|🔧|🐎|🐳|↩)?\\s?(\\w+)(\\(\\w+\\))?!?: /g"
     replace: ""
 template: |
   ## What's new in keycloak-spi-limit-resend-email's $RESOLVED_VERSION!
