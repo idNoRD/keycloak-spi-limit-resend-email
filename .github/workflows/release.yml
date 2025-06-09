@@ -24,7 +24,7 @@ jobs:
           cache: maven
 
       - name: Set version from tag
-        run: mvn versions:set -DnewVersion=${GITHUB_REF_NAME}
+        run: mvn -B -q versions:set -DnewVersion=${GITHUB_REF_NAME}
 
       - name: Build
         run: mvn -B -q clean package -DskipTests
@@ -75,8 +75,8 @@ jobs:
           NEXT_PATCH=$((PATCH_VERSION + 1))
           NEXT_VERSION="${BASE_VERSION}.${NEXT_PATCH}-SNAPSHOT"
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_OUTPUT
-          mvn versions:set -DnewVersion=$NEXT_VERSION
-          mvn versions:commit
+          mvn -B -q versions:set -DnewVersion=$NEXT_VERSION
+          mvn -B -q versions:commit
 
       - name: Commit version bump
         run: |
