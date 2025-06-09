@@ -1,5 +1,4 @@
 ---
-# ✨|🐞|📃|🌈|🦄|🎈|🧪|🔧|🐎|🐳|↩
 name-template: "$RESOLVED_VERSION"
 tag-template: "$RESOLVED_VERSION"
 prerelease: true
@@ -11,25 +10,19 @@ categories:
   - title: 🔔 Deprecation Warnings
     labels:
       - deprecation
-  - title: ✨ Features
+  - title: 🚀 Features
     labels:
       - enhancement
-  - title: 🐞 Bug Fixes
+  - title: 🐛 Bug Fixes
     labels:
       - bug
   - title: 🧪 Tests
     labels:
       - tests
-  - title: 🐳 Maintenance chore
+  - title: 🔨 Maintenance
     labels:
-      - chore
-  - title: 🌈 Maintenance style
-    labels:
-      - style
-  - title: 🦄 Maintenance refactor
-    labels:
-      - refactor
-  - title: 🐎 CI/CD
+      - maintenance
+  - title: 👷 CI/CD
     labels:
       - ci
   - title: ⬆️ Dependencies
@@ -39,15 +32,6 @@ categories:
   - title: 📃 Documentation
     labels:
       - documentation
-  - title: 🎈 Performance
-    labels:
-      - performance
-  - title: 🔧 Build
-    labels:
-      - build
-  - title: ↩ Revert
-    labels:
-      - revert
   - title: Other Changes
     labels:
       - "*"
@@ -60,18 +44,13 @@ version-resolver:
       - deprecation
   patch:
     labels:
-      - bug
-      - ci
-      - chore
-      - refactor
-      - style
-      - dependencies
-      - documentation
       - enhancement
+      - bug
       - tests
-      - build
-      - performance
-      - revert
+      - documentation
+      - ci
+      - maintenance
+      - dependencies
   default: patch
 autolabeler:
   - label: breaking change
@@ -82,7 +61,7 @@ autolabeler:
       - "/deprecate/i"
   - label: enhancement
     title:
-      - "/^[^:]*(feat|feature)(\\([^)]*\\))?:/i"
+      - "/^[^:]*(feat|feature|perf)(\\([^)]*\\))?:/i"
   - label: bug
     title:
       - "/^[^:]*(bug)(\\([^)]*\\))?:/i"
@@ -94,25 +73,13 @@ autolabeler:
       - "/^[^:]*(docs|documentation)(\\([^)]*\\))?:/i"
   - label: ci
     title:
-      - "/^[^:]*(ci)(\\([^)]*\\))?:/i"
-  - label: chore
+      - "/^[^:]*(ci|build)(\\([^)]*\\))?:/i"
+  - label: maintenance
     title:
-      - "/^[^:]*(chore)(\\([^)]*\\))?:/i"
-  - label: style
+      - "/^[^:]*(chore|refactor|style|revert)(\\([^)]*\\))?:/i"
+  - label: dependencies
     title:
-      - "/^[^:]*(style)(\\([^)]*\\))?:/i"
-  - label: refactor
-    title:
-      - "/^[^:]*(refactor)(\\([^)]*\\))?:/i"
-  - label: performance
-    title:
-      - "/^[^:]*(perf)(\\([^)]*\\))?:/i"
-  - label: build
-    title:
-      - "/^[^:]*(build)(\\([^)]*\\))?:/i"
-  - label: revert
-    title:
-      - "/^[^:]*(revert)(\\([^)]*\\))?:/i"
+      - "/.+\\sto\\sv.+"
 replacers:
   - search: "/[^:]*(\\w+)(\\(\\w+\\))?!?: /g"
     replace: ""
