@@ -67,18 +67,31 @@ jobs:
           cache: maven
 
       - name: Bump to next snapshot version
+        id: bump_version
         run: |
           RELEASE_VERSION=${GITHUB_REF_NAME}
           BASE_VERSION=$(echo "$RELEASE_VERSION" | sed -E 's/^([0-9]+\.[0-9]+)\..*/\1/')
           PATCH_VERSION=$(echo "$RELEASE_VERSION" | sed -E 's/^.*\.([0-9]+)$/\1/')
           NEXT_PATCH=$((PATCH_VERSION + 1))
           NEXT_VERSION="${BASE_VERSION}.${NEXT_PATCH}-SNAPSHOT"
+          echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_OUTPUT
           mvn versions:set -DnewVersion=$NEXT_VERSION
           mvn versions:commit
 
-      - name: Commit and push version bump
+      - name: Commit version bump
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git commit -am "chore: bump version to $NEXT_VERSION after release"
-          git push origin main
+          git checkout -b bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}
+          git commit -am "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}
+          title: "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
+          body: |
+            This PR bumps the version to `${{ steps.bump_version.outputs.NEXT_VERSION }}` after the release.
+          base: main
+          delete-branch: true
+
