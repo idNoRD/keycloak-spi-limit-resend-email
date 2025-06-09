@@ -88,10 +88,10 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}
+          branch: bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-{{ github.run_number }}
           title: "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
           body: |
             This PR bumps the version to `${{ steps.bump_version.outputs.NEXT_VERSION }}` after the release.
           base: main
           delete-branch: true
-
+          create-branch: true
