@@ -1,5 +1,4 @@
 ---
-# ✨|🐞|📃|🌈|🦄|🎈|🧪|🔧|🐎|🐳|↩
 name-template: "$RESOLVED_VERSION"
 tag-template: "$RESOLVED_VERSION"
 prerelease: true
@@ -11,25 +10,19 @@ categories:
   - title: 🔔 Deprecation Warnings
     labels:
       - deprecation
-  - title: ✨ Features
+  - title: 🚀 Features
     labels:
       - enhancement
-  - title: 🐞 Bug Fixes
+  - title: 🐛 Bug Fixes
     labels:
       - bug
   - title: 🧪 Tests
     labels:
       - tests
-  - title: 🐳 Maintenance chore
+  - title: 🔨 Maintenance
     labels:
-      - chore
-  - title: 🌈 Maintenance style
-    labels:
-      - style
-  - title: 🦄 Maintenance refactor
-    labels:
-      - refactor
-  - title: 🐎 CI/CD
+      - maintenance
+  - title: 👷 CI/CD
     labels:
       - ci
   - title: ⬆️ Dependencies
@@ -39,15 +32,6 @@ categories:
   - title: 📃 Documentation
     labels:
       - documentation
-  - title: 🎈 Performance
-    labels:
-      - performance
-  - title: 🔧 Build
-    labels:
-      - build
-  - title: ↩ Revert
-    labels:
-      - revert
   - title: Other Changes
     labels:
       - "*"
@@ -60,85 +44,45 @@ version-resolver:
       - deprecation
   patch:
     labels:
-      - bug
-      - ci
-      - chore
-      - refactor
-      - style
-      - dependencies
-      - documentation
       - enhancement
+      - bug
       - tests
-      - build
-      - performance
-      - revert
+      - documentation
+      - ci
+      - maintenance
+      - dependencies
   default: patch
 autolabeler:
   - label: breaking change
     body:
       - "/breaking/i"
-    title:
-      - "/^(✨)?\\s?(feat|feature)(\\([^)]*\\))?!:/i" # feat!: or feat!: breaking change
-      - "/breaking/i"
-      - "/^\\w+!/i"
   - label: deprecation
-    title:
+    body:
       - "/deprecate/i"
   - label: enhancement
     title:
-      - "/^(✨)?\\s?(feat|feature)(\\([^)]*\\))?:/i"
-      - "/feat/i"
-      - "/feature/i"
+      - "/^[^:]*(feat|feature|perf)(\\([^)]*\\))?:/i"
   - label: bug
     title:
-      - "/^(🐞)?\\s?(style)(\\([^)]*\\))?:/i"
-      - "/fix/i"
-      - "/bug/i"
-      - "/bugfix/i"
+      - "/^[^:]*(bug)(\\([^)]*\\))?:/i"
   - label: tests
-    files:
-      - "/tests/**"
     title:
-      - "/^(🧪)?\\s?(test|tests)(\\([^)]*\\))?:/i"
-      - "/tests{0,1}\/.+/i"
+      - "/^[^:]*(test|tests)(\\([^)]*\\))?:/i"
   - label: documentation
-    files:
-      - "docs/**"
     title:
-      - "/^(📃)?\\s?(docs|documentation)(\\([^)]*\\))?:/i"
-      - "/docs{0,1}\/.+/i"
-      - "/documentation/i"
+      - "/^[^:]*(docs|documentation)(\\([^)]*\\))?:/i"
   - label: ci
     title:
-      - "/^(🐎)?\\s?(ci)(\\([^)]*\\))?:/i"
-      - "/ci/i"
-  - label: chore
+      - "/^[^:]*(ci|build)(\\([^)]*\\))?:/i"
+  - label: maintenance
     title:
-      - "/^(🐳)?\\s?(chore)(\\([^)]*\\))?:/i"
-      - "/chore/i"
-  - label: style
+      - "/^[^:]*(chore|refactor|style|revert)(\\([^)]*\\))?:/i"
+  - label: dependencies
     title:
-      - "/^(🌈)?\\s?(style)(\\([^)]*\\))?:/i"
-      - "/style/i"
-  - label: refactor
-    title:
-      - "/^(🦄)?\\s?(refactor)(\\([^)]*\\))?:/i"
-      - "/refactor/i"
-  - label: performance
-    title:
-      - "/^(🎈)?\\s?(perf)(\\([^)]*\\))?:/i"
-      - "/perf/i"
-  - label: build
-    title:
-      - "/^(🔧)?\\s?(build)(\\([^)]*\\))?:/i"
-      - "/build/i"
-  - label: revert
-    title:
-      - "/^(↩)?\\s?(revert)(\\([^)]*\\))?:/i"
-      - "/revert/i"
-replacers:
-  - search: "/(✨|🐞|📃|🌈|🦄|🎈|🧪|🔧|🐎|🐳|↩)?\\s?(\\w+)(\\(\\w+\\))?!?: /g"
-    replace: ""
+      - "/.+\\sto\\sv.+"
+#replacers:
+#  - search: "/[^:]*(\\w+)(\\(\\w+\\))?!?: /g"
+#    replace: ""
 template: |
   ## What's new in keycloak-spi-limit-resend-email's $RESOLVED_VERSION!
 
