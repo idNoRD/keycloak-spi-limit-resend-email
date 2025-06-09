@@ -82,7 +82,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git checkout -b bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}
+          git checkout -b bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
           git commit -am "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
           git push origin bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
 
