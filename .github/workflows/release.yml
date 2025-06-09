@@ -84,12 +84,12 @@ jobs:
           git config user.email "github-actions@github.com"
           git checkout -b bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}
           git commit -am "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
-          git push origin bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-{{ github.run_number }}
+          git push origin bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-{{ github.run_number }}
+          branch: bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
           title: "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release job:{{ github.run_number }}"
           body: |
             This PR bumps the version to `${{ steps.bump_version.outputs.NEXT_VERSION }}` after the release.
