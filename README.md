@@ -1,4 +1,10 @@
 # keycloak-spi-limit-resend-email
+[![jar](https://img.shields.io/github/v/tag/idNoRD/keycloak-spi-limit-resend-email?label=jar&logo=openjdk&logoColor=000000&labelColor=ED8B00)](https://github.com/idNoRD/keycloak-spi-limit-resend-email/releases/latest)
+[![Build & Test](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml/badge.svg)](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml)
+![GitHub Maintained](https://img.shields.io/maintenance/yes/2025)
+![GitHub License](https://img.shields.io/github/license/ironwolphern/ansible-role-certbot)
+[![Compatible with Keycloak](https://img.shields.io/badge/Compatible_with_Keycloak-26.1.4-blue)](https://github.com/keycloak/keycloak/releases)
+---
 Keycloak spi that 
 - limits resend email verification 
 ([#192341](https://github.com/keycloak/keycloak/issues/19234), 
@@ -7,9 +13,9 @@ Keycloak spi that
 ([#24914](https://github.com/keycloak/keycloak/issues/24914), 
 [#26182](https://github.com/keycloak/keycloak/issues/26182), 
 [#16574](https://github.com/keycloak/keycloak/issues/16574))
-
-## Notice:
-This repository is under active development and not yet ready for production
+---
+## ⚠️ Notice:
+This repository is under active development. Use in production environments at your own risk.
 
 ---
 
