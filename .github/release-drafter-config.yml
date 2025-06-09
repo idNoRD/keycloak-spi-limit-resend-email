@@ -57,56 +57,43 @@ autolabeler:
     body:
       - "/breaking/i"
     title:
+      - "/^[^\\w]*\\w+!:/i" # e.g. 🚨 feat!: or feat!: breaking change
       - "/breaking/i"
       - "/^\\w+!/i"
   - label: deprecation
-    branch:
-      - "/deprecate\/.+/"
     title:
       - "/deprecate/i"
   - label: enhancement
-    branch:
-      - "/feat\/.+/"
-      - "/feature\/.+/"
     title:
+      - "/^[^\\w]*(feat|feature)(\\([^)]*\\))?:/i"
       - "/feat/i"
       - "/feature/i"
   - label: bug
-    branch:
-      - "/fix\/.+/"
-      - "/bug\/.+/"
-      - "/bugfix\/.+/"
     title:
+      - "/^[^\\w]*(fix|bug|bugfix)(\\([^)]*\\))?:/i"
       - "/fix/i"
       - "/bug/i"
       - "/bugfix/i"
   - label: tests
-    branch:
-      - "/tests{0,1}\/.+/"
     files:
       - "/tests/**"
     title:
+      - "/^[^\\w]*test(s)?(\\([^)]*\\))?:/i"
       - "/tests{0,1}\/.+/i"
   - label: documentation
-    branch:
-      - "/docs{0,1}\/.+/"
-      - "/documentation\/.+/"
     files:
       - "docs/**"
     title:
+      - "/^[^\\w]*(docs|documentation)(\\([^)]*\\))?:/i"
       - "/docs{0,1}\/.+/i"
       - "/documentation/i"
   - label: ci
-    branch:
-      - "/ci\/.+/"
     title:
+      - "/^[^\\w]*ci(\\([^)]*\\))?:/i"
       - "/ci/i"
   - label: chore
-    branch:
-      - "/chore\/.+/"
-      - "/refactor\/.+/"
-      - "/style\/.+/"
     title:
+      - "/^[^\\w]*(chore|refactor|style)(\\([^)]*\\))?:/i"
       - "/chore/i"
       - "/refactor/i"
       - "/style/i"
