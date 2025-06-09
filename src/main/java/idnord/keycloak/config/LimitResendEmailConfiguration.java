@@ -1,10 +1,7 @@
 package idnord.keycloak.config;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Optional;
 
-@Slf4j
 public class LimitResendEmailConfiguration {
 
     public static final int LIMIT_RESEND_EMAIL_MAX_RETRIES;
