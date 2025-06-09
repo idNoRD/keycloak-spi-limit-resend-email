@@ -19,33 +19,30 @@ public class LimitResendEmailLastTimeAndCountListener implements EventListenerPr
 
     @Override
     public void onEvent(Event event) {
-        if (event.getType().equals(EventType.SEND_VERIFY_EMAIL)
-                || event.getType().equals(EventType.SEND_RESET_PASSWORD)) {
+        if (EventType.SEND_VERIFY_EMAIL == event.getType() || EventType.SEND_RESET_PASSWORD == event.getType()) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
                 user.setSingleAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForTime, Integer.toString(Time.currentTime()));
-                //
+                // Increase counter on each sent email
                 String attributeNameForCount = LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForCount;
-                int count = 0;
+                int emailsSentCount = 0;
                 try {
-                    count = Integer.parseInt(user.getFirstAttribute(attributeNameForCount));
+                    emailsSentCount = Integer.parseInt(user.getFirstAttribute(attributeNameForCount));
                 } catch (Exception ignored) {
                 }
-                if (count < Integer.MAX_VALUE) {
-                    user.setSingleAttribute(attributeNameForCount, Integer.toString(count + 1));
+                if (emailsSentCount < Integer.MAX_VALUE) {
+                    user.setSingleAttribute(attributeNameForCount, Integer.toString(emailsSentCount + 1));
                 }
-                log.info("{} triggered for user {}, count now: {}", event.getType(), user.getUsername(), count);
+                log.debug("Event={} triggered for username={}, emailsSentCount={}", event.getType(), user.getUsername(), emailsSentCount);
             }
-        }
-
-        // Reset counter on successful email verification or successful password reset
-        if (event.getType() == EventType.VERIFY_EMAIL
-                || (event.getType() == EventType.UPDATE_CREDENTIAL && "password".equalsIgnoreCase(event.getDetails().get(Details.CREDENTIAL_TYPE)))) {
+        } else if (EventType.VERIFY_EMAIL == event.getType()
+                || (EventType.UPDATE_CREDENTIAL == event.getType() && "password".equalsIgnoreCase(event.getDetails().get(Details.CREDENTIAL_TYPE)))) {
             UserModel user = session.users().getUserById(session.getContext().getRealm(), event.getUserId());
             if (user != null) {
+                // Reset counter on successful email verification or successful password reset
                 user.removeAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForCount);
                 user.removeAttribute(LimitResendEmailLastTimeAndCountListenerFactory.attributeNameForTime);
-                log.info("Email verified for user {}, resend count reset", user.getUsername());
+                log.debug("Email verified for username={}, count reset", user.getUsername());
             }
         }
 

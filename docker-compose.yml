@@ -21,8 +21,9 @@ services:
       - KC_FEATURES=scripts
       - KC_HTTP_PORT=8080
       - KC_HTTPS_PORT=9443
+      - KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES=3
+      - KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC=3600
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - '8080:8080'
-      - '9443:9443'
+      - '8484:8080'

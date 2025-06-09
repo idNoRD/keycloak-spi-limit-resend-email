@@ -1,6 +1,6 @@
 package idnord.keycloak.authenticator;
 
-import idnord.keycloak.config.Configuration;
+import com.google.auto.service.AutoService;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
@@ -13,11 +13,12 @@ import org.keycloak.provider.ProviderConfigProperty;
 import java.util.List;
 
 @Slf4j
+@AutoService(AuthenticatorFactory.class)
 public class LimitResendEmailAuthenticatorFactory implements AuthenticatorFactory {
 
     public static final String PROVIDER_ID = "limit-resend-email-authenticator";
 
-    private static final Authenticator SINGLETON = new LimitResendEmailAuthenticator(Configuration.loadFromEnv());
+    private static final Authenticator SINGLETON = new LimitResendEmailAuthenticator();
 
     @Override
     public Authenticator create(KeycloakSession session) {

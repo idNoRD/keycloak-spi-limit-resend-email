@@ -1,8 +1,6 @@
 package idnord.keycloak.authenticator;
 
 import idnord.keycloak.LimitResendEmailCore;
-import idnord.keycloak.config.Configuration;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
@@ -11,17 +9,19 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
-@Slf4j
-@RequiredArgsConstructor
-public class LimitResendEmailAuthenticator implements Authenticator {
+import static idnord.keycloak.config.LimitResendEmailConfiguration.LIMIT_RESEND_EMAIL_MAX_RETRIES;
+import static idnord.keycloak.config.LimitResendEmailConfiguration.LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC;
 
-    private final Configuration configuration;
+@Slf4j
+public class LimitResendEmailAuthenticator implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
         UserModel user = context.getUser();
 
-        if (LimitResendEmailCore.isLimitResendEmailReached(user, configuration.getLimitResendEmailMaxRetries(), configuration.getLimitResendEmailRetryBlockDurationInSec())) {
+        if (LimitResendEmailCore.isLimitResendEmailReached(user, LIMIT_RESEND_EMAIL_MAX_RETRIES, LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC)) {
+            log.info("Email sending limited for username={}, clientId={}, IP={}.",
+                    user.getUsername(), context.getAuthenticationSession().getClient().getClientId(), context.getSession().getContext().getConnection().getRemoteAddr());
             context.failure(AuthenticationFlowError.USER_TEMPORARILY_DISABLED);
             // @TODO a page with custom message
         } else {

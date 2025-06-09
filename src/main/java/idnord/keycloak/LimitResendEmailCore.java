@@ -10,7 +10,7 @@ public class LimitResendEmailCore {
     public static boolean isLimitResendEmailReached(UserModel user, final int LIMIT_RESEND_EMAIL_MAX_RETRIES, final int LIMIT_RESEND_EMAIL_BLOCK_DURATION_SECONDS) {
 
         int count = 0;
-        long lastTime = 0;
+        long lastEmailSentTime = 0;
 
         try {
             String countAttr = user.getFirstAttribute(LimitResendEmailCore.ATTR_FOR_LIMIT_RESEND_EMAIL_COUNT);
@@ -23,17 +23,18 @@ public class LimitResendEmailCore {
         try {
             String lastTimeAttr = user.getFirstAttribute(LimitResendEmailCore.ATTR_FOR_LIMIT_RESEND_EMAIL_LAST_TIME);
             if (lastTimeAttr != null) {
-                lastTime = Long.parseLong(lastTimeAttr);
+                lastEmailSentTime = Long.parseLong(lastTimeAttr);
             }
         } catch (Exception ignored) {
         }
 
         if (count < LIMIT_RESEND_EMAIL_MAX_RETRIES) {
+            // send emails immediately until MAX_RETRIES, then only one email after each BLOCK_DURATION is allowed (see reset logic in listener)
             return false;
         } else {
-            long now = System.currentTimeMillis() / 1000; // current time in seconds
-            // If last resend was more than X sec ago, reset count
-            if (now - lastTime > LIMIT_RESEND_EMAIL_BLOCK_DURATION_SECONDS) {
+            long nowTimeInSeconds = System.currentTimeMillis() / 1000;
+            // If last email was more than DURATION seconds ago allow sending email
+            if (nowTimeInSeconds - lastEmailSentTime > LIMIT_RESEND_EMAIL_BLOCK_DURATION_SECONDS) {
                 return false;
             } else {
                 return true;
