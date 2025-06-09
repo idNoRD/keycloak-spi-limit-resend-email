@@ -80,9 +80,9 @@ autolabeler:
   - label: dependencies
     title:
       - "/.+\\sto\\sv.+"
-replacers:
-  - search: "/[^:]*(\\w+)(\\(\\w+\\))?!?: /g"
-    replace: ""
+#replacers:
+#  - search: "/[^:]*(\\w+)(\\(\\w+\\))?!?: /g"
+#    replace: ""
 template: |
   ## What's new in keycloak-spi-limit-resend-email's $RESOLVED_VERSION!
 
