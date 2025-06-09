@@ -20,8 +20,8 @@ This repository is under active development and not yet ready for production
 ### 4. Restart Keycloak
 ### 5. Adjust settings
 ```text
-KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES = 3
-KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC = 3600
+KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES=3
+KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC=3600
 ```
 ### 6. Configure Realm
 - Open master realm and check that "Provider info" contains
@@ -97,7 +97,7 @@ mvn clean package
 ```
 Ensure JAR includes necessary META-INF services
 ```bash
-jar tf target/idnord.keycloak-keycloak-spi-limit-resend-email.jar | grep META-INF/services/
+jar tf target/idnord.keycloak-*.jar | grep META-INF/services/
 ```
 Expected services:  
 (IMPORTANT: if you see more than this list of services in jar it means that a dependency in pom.xml needs scope `<scope>provided</scope>`)
