@@ -29,7 +29,7 @@ categories:
     collapse-after: 15
     labels:
       - dependencies
-  - title: 📃 Documentation
+  - title: 📝 Documentation
     labels:
       - documentation
   - title: Other Changes
