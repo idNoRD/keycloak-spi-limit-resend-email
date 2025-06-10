@@ -67,6 +67,7 @@ KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC=3600
 - Keycloak redirects to the Verification page and sends a new email verification email.
 - **(Problem we solve):** The user can repeatedly log in to trigger email-verification emails without confirming any, leading to spam.
 - **(Solution):** If the limit is reached, the Verification page shows an error and no email is sent during 1 hour.
+[![Watch the video](https://img.youtube.com/vi/0jJc2Xn8FO0/maxresdefault.jpg)](https://youtu.be/0jJc2Xn8FO0)
 
 ## Feature #3 (Email verification page protection)
 
