@@ -57,7 +57,7 @@ KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC=3600
   The user clicks "Resend" more than 3 times but does not open or confirm any of the emails.
 - **User then opens the Login page and clicks "Forgot password".**
 - **(Problem we solve):** The user can abuse the system by repeatedly triggering "Forgot password", spamming password reset emails.
-- **(Solution):** If more than 3 verification or forgot password emails were sent within the last hour and none were confirmed, an error is shown to block further emails.  
+- **(Solution):** If more than 3 verification or forgot password emails were sent within the last hour and none were confirmed, an error is shown to temporarily block further emails.  
 
 ## Feature #2 (Login protection):
 
