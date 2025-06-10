@@ -23,24 +23,27 @@ This repository is under active development. Use in production environments at y
 ### 1. Download a jar from [Releases](https://github.com/idNoRD/keycloak-spi-limit-resend-email/releases/latest)
 ### 2. Copy jar to /opt/keycloak/providers/
 ### 3. Rebuild Keycloak `/opt/keycloak/bin/kc.sh build`
-### 4. Restart Keycloak
-### 5. Adjust settings
+### 4. Configure the provider using the following environment variables:
 ```text
 KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES=3
 KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC=3600
 ```
+| Environment Variable                                       | Description                                                                                                                                                                                                  | Default Value |
+|------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| `KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES`                 | Maximum number of attempts to send verification or reset password emails without delay. After reaching this limit, email sending will be temporarily blocked until the user verifies their email or resets the password. | `3`           |
+| `KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC` | Duration (in seconds) of the block after exceeding the retry limit. After this period, the user may send one more email before being blocked again, unless they verify or reset their password.               | `3600`        |
+### 5. Restart Keycloak
 ### 6. Configure Realm
-- Open master realm and check that "Provider info" contains
+#### 6.1 Open master realm and check that "Provider info" contains
   - eventsListener contains limit-resend-email-event
   - authenticator contains limit-resend-email-authenticator
   - required-action contains VERIFY_EMAIL
-- Go to "Realm Settings" of your realm → Events → Event Listeners and add `limit-resend-email-event` and click Save.
-- Go to "Authentication" → "Flows" tab and Duplicate the **"reset credentials"** flow and insert **"LimitResendEmail Authenticator"** (mark as **Required**). 
-  - Reorder and Place the **"LimitResendEmail Authenticator"** above **"Send Reset Email"** so that it runs before "Send Reset Email".
-- In your duplicated flow click Action → "Bind flow" to set it as the active **"Reset credentials flow"** .
-- Go to "Authentication" → "Required Actions" tab → Make sure **Verify Email** is enabled and the **Default Action** is set to **On**.
-### 7. Optional setting
-To see attributes of a user in keycloak
+#### 6.2 Go to "Realm Settings" of your realm → Events → Event Listeners and add `limit-resend-email-event` and click Save.
+#### 6.3.1 Go to "Authentication" → "Flows" tab and Duplicate the **"reset credentials"** flow and insert **"LimitResendEmail Authenticator"** (mark as **Required**). 
+#### 6.3.2 Reorder and Place the **"LimitResendEmail Authenticator"** above **"Send Reset Email"** so that it runs before "Send Reset Email".
+#### 6.3.4 In your duplicated flow click Action → "Bind flow" to set it as the active **"Reset credentials flow"** .
+#### 6.4  Go to "Authentication" → "Required Actions" tab → Make sure **Verify Email** is enabled and the **Default Action** is set to **On**.
+### 7. Optionally show user attributes in keycloak to see LimitResendEmailCount for each user
 - Realm settings
   - General
     - Unmanaged Attributes
