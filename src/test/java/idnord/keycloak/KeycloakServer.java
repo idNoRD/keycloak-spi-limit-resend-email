@@ -2,6 +2,8 @@ package idnord.keycloak;
 
 import org.keycloak.Keycloak;
 
+// KeycloakTestUtils is based on this approach:
+
 /**
  * <p>Run this application from your IDE passing any CLI arguments. For instance, start-dev.
  * Make sure to add the following system properties before running:
@@ -11,7 +13,6 @@ import org.keycloak.Keycloak;
  *
  * <p>The custom provider is added as a dependency and you should be able to debug within the
  * same JVM as the server.</p>
- */
 public class KeycloakServer {
 
     public static void main(String[] args) {
@@ -21,3 +22,4 @@ public class KeycloakServer {
                 .start(args);
     }
 }
+*/
