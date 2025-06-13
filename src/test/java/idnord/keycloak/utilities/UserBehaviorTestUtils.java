@@ -16,7 +16,8 @@ public class UserBehaviorTestUtils {
     private final WebDriver driver;
     private final static WebDriverManager wdm;
 
-    private final String host = System.getProperty("test.host", "host.docker.internal");
+    //private final String host = System.getProperty("test.host", "host.docker.internal");
+    private final String host = System.getProperty("test.host", "172.18.0.2");
     private final KeycloakTestUtils kc;
 
     static {
