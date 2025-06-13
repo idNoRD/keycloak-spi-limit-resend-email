@@ -14,13 +14,12 @@ import java.util.Objects;
 public class UserBehaviorTestUtils {
 
     private final WebDriver driver;
-    private final WebDriverManager wdm;
+    private final static WebDriverManager wdm;
 
     private final String host = System.getProperty("test.host", "host.docker.internal");
     private final KeycloakTestUtils kc;
 
-    public UserBehaviorTestUtils(KeycloakTestUtils kc) {
-        this.kc = kc;
+    static {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--remote-allow-origins=*");
         chromeOptions.addArguments("--no-sandbox");
@@ -38,6 +37,10 @@ public class UserBehaviorTestUtils {
         wdm = WebDriverManager.chromedriver().capabilities(chromeOptions)
                 //.enableVnc().enableRecording() // uncomment for demo purposes or manual testing
                 .browserInDocker();
+    }
+
+    public UserBehaviorTestUtils(KeycloakTestUtils kc) {
+        this.kc = kc;
         driver = wdm.create();
         driver.manage().window().maximize();
     }
