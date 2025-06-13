@@ -28,7 +28,7 @@ public class EmailSendingTest {
                 .addListenerToEvents()
                 .configureSmtpViaAdminClient(ms.getMailServerHost(), ms.getMailServerPort())
                 .setUnmanagedAttributesPolicyToAdminOnly();
-        ub = new UserBehaviorTestUtils();
+        ub = new UserBehaviorTestUtils(kc);
     }
 
     @AfterEach

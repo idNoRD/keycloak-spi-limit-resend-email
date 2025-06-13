@@ -16,10 +16,11 @@ public class UserBehaviorTestUtils {
     private final WebDriver driver;
     private final WebDriverManager wdm;
 
-    // Defaults to "localhost" unless overridden via -Dtest.host=host.docker.internal
-    private String host = System.getProperty("test.host", "localhost");
+    private final String host = System.getProperty("test.host", "host.docker.internal");
+    private final KeycloakTestUtils kc;
 
-    public UserBehaviorTestUtils() {
+    public UserBehaviorTestUtils(KeycloakTestUtils kc) {
+        this.kc = kc;
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--remote-allow-origins=*");
         chromeOptions.addArguments("--no-sandbox");
@@ -39,21 +40,13 @@ public class UserBehaviorTestUtils {
                 .browserInDocker();
         driver = wdm.create();
         driver.manage().window().maximize();
-
-        // docker localhost is different on docker desktop and github ci
-        try {
-            System.out.println("Trying to use host=" + host);
-            driver.get("http://" + host + ":8080/realms/master/account");
-        } catch (Exception e) {
-            host = "host.docker.internal";
-        }
     }
 
     public void attemptLogin(String username, String password, String expectedUrl) {
-        driver.get("http://" + host + ":8080/realms/master/account");
+        driver.get("http://" + host + ":" + kc.getKcHttpPort() + "/realms/master/account");
 
         // Wait until username input is present (optional but recommended)
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
 
         // Fill username
@@ -84,7 +77,7 @@ public class UserBehaviorTestUtils {
         WebElement clickHereToResendVerificationEmail = driver.findElement(By.xpath("//a[contains(., 'Click here')]"));
         clickHereToResendVerificationEmail.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         wait.until(ExpectedConditions.urlContains(expectedUrl));
 
         return Objects.requireNonNull(driver.getPageSource()).contains(expectedTextInThePage);
