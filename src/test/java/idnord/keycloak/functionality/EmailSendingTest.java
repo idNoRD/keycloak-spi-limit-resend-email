@@ -21,8 +21,8 @@ public class EmailSendingTest {
     static MailServerTestUtils ms;
     static UserBehaviorTestUtils ub;
 
-    @BeforeAll
-    static void setupContainer() {
+    @BeforeEach
+    void setupContainer() {
         ms = new MailServerTestUtils();
         kc = new KeycloakTestUtils()
                 .addListenerToEvents()
@@ -31,19 +31,20 @@ public class EmailSendingTest {
         ub = new UserBehaviorTestUtils();
     }
 
-    @AfterAll
-    static void tearDown() {
+    @AfterEach
+    void tearDown() {
         ub.tearDown();
         kc.tearDown();
         ms.tearDown();
     }
 
     @Test
-    void testLimitResendEmailAfterMaxRetries() throws IOException {
+    void testSuccessfulLoginsLimitSendingEmailVerificationAfterMaxRetries() throws IOException {
         String realm = "master";
         String username = "testuser";
         String password = "testuser";
-        UserRepresentation user = kc.getUserRepresentation(username, password);
+        String email = "testuser@example.com";
+        UserRepresentation user = kc.getUserRepresentation(username, password, email);
 
         Response response = kc.getAdminClient().realm(realm).users().create(user);
         assertEquals(201, response.getStatus());
@@ -95,4 +96,59 @@ public class EmailSendingTest {
 
     }
 
+    @Test
+    void testClickResendVerificationEmailLimitSendingEmailVerificationAfterMaxRetries() throws IOException {
+        String realm = "master";
+        String username = "testuser2";
+        String password = "testuser2";
+        String email = "testuser2@example.com";
+        UserRepresentation user = kc.getUserRepresentation(username, password, email);
+
+        Response response = kc.getAdminClient().realm(realm).users().create(user);
+        assertEquals(201, response.getStatus());
+        String userId = CreatedResponseUtil.getCreatedId(response);
+
+        int expectedEmailSent = 0;
+        ub.attemptLogin(username, password, "/login-actions/required-action?execution=VERIFY_EMAIL");
+        expectedEmailSent += 1;
+
+        for (int i = 0; i < MAX_RETRIES - 1; i++) {
+            try {
+
+                assertTrue(ub.clickResend("Click here", "/login-actions/required-action?execution=VERIFY_EMAIL"));
+                expectedEmailSent += 1;
+
+                int emailCountFromAttribute = Integer.parseInt(Optional.of(kc.getAttribute(userId, "LimitResendEmailCount")).orElse("0"));
+                System.out.println("emailCountFromAttribute LimitResendEmailCount=" + emailCountFromAttribute);
+                assertEquals(expectedEmailSent, emailCountFromAttribute);
+
+                //System.out.println("Sleep5...");
+                //Thread.sleep(Duration.ofSeconds(i));
+
+                int emailCount = ms.getEmailCount().size();
+                System.out.println("Emails received by fake SMTP: " + emailCount);
+
+                // Example assertion - expect at least 1 email sent
+                assertEquals(expectedEmailSent, emailCount, "Email should be sent on attempt " + (i + 1));
+            } catch (Exception e) {
+                expectedEmailSent = -1;
+                System.out.println("ERROR: " + e.getMessage());
+            }
+        }
+        int emailCountAfterMaxAttempts = ms.getEmailCount().size();
+        try {
+            assertTrue(ub.clickResend("Failed to send email", "/login-actions/required-action?execution=VERIFY_EMAIL"));
+
+            int emailCountFromAttribute = Integer.parseInt(Optional.of(kc.getAttribute(userId, "LimitResendEmailCount")).orElse("0"));
+            System.out.println("emailCountFromAttribute LimitResendEmailCount=" + emailCountFromAttribute);
+            assertEquals(expectedEmailSent, emailCountFromAttribute);
+
+            int emailCount = ms.getEmailCount().size();
+            System.out.println("Emails received by fake SMTP: " + emailCount);
+            assertEquals(emailCountAfterMaxAttempts, emailCount, "Email should NOT be sent on last attempt");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+
+    }
 }
