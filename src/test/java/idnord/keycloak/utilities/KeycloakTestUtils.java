@@ -53,12 +53,13 @@ public class KeycloakTestUtils {
     }
 
     public void tearDown() {
-        System.out.println("Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
+        System.out.println("[START] Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
         try {
             kc.get().stop();
         } catch (TimeoutException e) {
             System.out.println("Unable to gracefully stop keycloak " + e.getMessage());
         }
+        System.out.println("[END] Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
     }
 
     public KeycloakTestUtils configureSmtpViaAdminClient(String mailServerHost, String mailServerPort) {

@@ -68,9 +68,11 @@ public class UserBehaviorTestUtils {
     }
 
     public void tearDown() {
+        System.out.println("Tearing down ub start kcHttpPort=" + kc.getKcHttpPort());
         if (wdm != null) {
             wdm.quit();
         }
+        System.out.println("Tearing down ub end kcHttpPort=" + kc.getKcHttpPort());
     }
 
     public boolean clickResend(String expectedTextInThePage, String expectedUrl) {

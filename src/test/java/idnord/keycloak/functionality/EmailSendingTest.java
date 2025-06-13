@@ -34,8 +34,8 @@ public class EmailSendingTest {
     @AfterEach
     void tearDown() {
         ub.tearDown();
-        kc.tearDown();
         ms.tearDown();
+        kc.tearDown();
     }
 
     @Test

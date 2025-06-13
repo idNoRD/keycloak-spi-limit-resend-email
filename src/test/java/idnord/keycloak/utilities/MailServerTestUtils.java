@@ -29,9 +29,13 @@ public class MailServerTestUtils {
     }
 
     public void tearDown() {
+        System.out.println("[START] Tearing down Mail Server");
         if (fakeSmtpServer != null) {
+            System.out.println("[START] Tearing down Mail Server " + fakeSmtpServer.getMappedPort(1080));
             fakeSmtpServer.stop();
+            System.out.println("[END] Tearing down Mail Server " + fakeSmtpServer.getMappedPort(1080));
         }
+        System.out.println("[END] Tearing down Mail Server");
     }
 
     public List<EmailMessage> getEmailCount() throws IOException {
