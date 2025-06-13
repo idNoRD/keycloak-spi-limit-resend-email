@@ -20,20 +20,32 @@ import static idnord.keycloak.config.LimitResendEmailConfiguration.LIMIT_RESEND_
 @AutoService(RequiredActionFactory.class)
 public class CustomVerifyEmail extends VerifyEmail implements RequiredActionProvider, RequiredActionFactory {
 
+    /**
+     * Applies protection logic before displaying a page that automatically triggers an email.
+     * For example, after a successful login, the verification page should not be shown
+     * if the email send limit has already been reached.
+     */
     @Override
     public void requiredActionChallenge(RequiredActionContext context) {
         UserModel user = context.getUser();
         if (LimitResendEmailCore.isLimitResendEmailReached(user, LIMIT_RESEND_EMAIL_MAX_RETRIES, LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC)) {
-            String email = context.getUser().getEmail();
-            EventBuilder event = context.getEvent().clone().event(EventType.SEND_VERIFY_EMAIL).detail("email", email);
-            event.clone().event(EventType.SEND_VERIFY_EMAIL).detail("reason", "Too many emails sent. Please wait before trying again.").user(user).error("email_send_failed");
-            log.info("Email sending limited for username={}, clientId={}, IP={}.",
-            user.getUsername(), context.getAuthenticationSession().getClient().getClientId(), context.getSession().getContext().getConnection().getRemoteAddr());
-
-            context.failure("emailSendErrorMessage");
-            context.challenge(context.form().setError("emailSendErrorMessage", new Object[0]).createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
+            handleReachedLimit(context, user);
         } else {
             super.requiredActionChallenge(context);
+        }
+    }
+
+    /**
+     * Applies protection logic after the user clicks "Resend Verification Email".
+     * For example, if a resend limit has been reached, the page with the resend link should not be displayed.
+     */
+    @Override
+    public void processAction(RequiredActionContext context) {
+        UserModel user = context.getUser();
+        if (LimitResendEmailCore.isLimitResendEmailReached(user, LIMIT_RESEND_EMAIL_MAX_RETRIES, LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC)) {
+            handleReachedLimit(context, user);
+        } else {
+            super.processAction(context);
         }
     }
 
@@ -45,6 +57,17 @@ public class CustomVerifyEmail extends VerifyEmail implements RequiredActionProv
     @Override
     public String getId() {
         return super.getId();
+    }
+
+    private void handleReachedLimit(RequiredActionContext context, UserModel user) {
+        String email = context.getUser().getEmail();
+        EventBuilder event = context.getEvent().clone().event(EventType.SEND_VERIFY_EMAIL).detail("email", email);
+        event.clone().event(EventType.SEND_VERIFY_EMAIL).detail("reason", "Too many emails sent. Please wait before trying again.").user(user).error("email_send_failed");
+        log.info("Email sending limited for username={}, clientId={}, IP={}.",
+                user.getUsername(), context.getAuthenticationSession().getClient().getClientId(), context.getSession().getContext().getConnection().getRemoteAddr());
+
+        context.failure("emailSendErrorMessage");
+        context.challenge(context.form().setError("emailSendErrorMessage", new Object[0]).createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
     }
 
 }

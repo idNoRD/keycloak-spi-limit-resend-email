@@ -185,8 +185,7 @@ public class KeycloakTestUtils {
     }
 
     @NotNull
-    public UserRepresentation getUserRepresentation(String username, String password) {
-        String email = "testuser@example.com";
+    public UserRepresentation getUserRepresentation(String username, String password, String email) {
 
         // 1. Create user with unverified email
         UserRepresentation user = new UserRepresentation();

@@ -9,12 +9,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserBehaviorTestUtils {
 
     private final WebDriver driver;
     private final WebDriverManager wdm;
     private final String localhost = "host.docker.internal";
+
     public UserBehaviorTestUtils() {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--remote-allow-origins=*");
@@ -67,4 +69,15 @@ public class UserBehaviorTestUtils {
             wdm.quit();
         }
     }
+
+    public boolean clickResend(String expectedTextInThePage, String expectedUrl) {
+        WebElement clickHereToResendVerificationEmail = driver.findElement(By.xpath("//a[contains(., 'Click here')]"));
+        clickHereToResendVerificationEmail.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlContains(expectedUrl));
+
+        return Objects.requireNonNull(driver.getPageSource()).contains(expectedTextInThePage);
+    }
+
 }
