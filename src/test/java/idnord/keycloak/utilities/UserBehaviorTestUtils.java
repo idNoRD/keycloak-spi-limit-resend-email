@@ -42,6 +42,7 @@ public class UserBehaviorTestUtils {
 
         // docker localhost is different on docker desktop and github ci
         try {
+            System.out.println("Trying to use host=" + host);
             driver.get("http://" + host + ":8080/realms/master/account");
         } catch (Exception e) {
             host = "host.docker.internal";
