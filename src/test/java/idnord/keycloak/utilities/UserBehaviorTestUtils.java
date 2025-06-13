@@ -15,7 +15,9 @@ public class UserBehaviorTestUtils {
 
     private final WebDriver driver;
     private final WebDriverManager wdm;
-    private final String localhost = "host.docker.internal";
+
+    // Defaults to "localhost" unless overridden via -Dtest.host=host.docker.internal
+    private String host = System.getProperty("test.host", "localhost");
 
     public UserBehaviorTestUtils() {
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -37,10 +39,17 @@ public class UserBehaviorTestUtils {
                 .browserInDocker();
         driver = wdm.create();
         driver.manage().window().maximize();
+
+        // docker localhost is different on docker desktop and github ci
+        try {
+            driver.get("http://" + host + ":8080/realms/master/account");
+        } catch (Exception e) {
+            host = "host.docker.internal";
+        }
     }
 
     public void attemptLogin(String username, String password, String expectedUrl) {
-        driver.get("http://" + localhost + ":8080/realms/master/account");
+        driver.get("http://" + host + ":8080/realms/master/account");
 
         // Wait until username input is present (optional but recommended)
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
