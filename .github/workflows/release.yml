@@ -79,13 +79,13 @@ jobs:
           mvn -B -q versions:set -DnewVersion=$NEXT_VERSION
           mvn -B -q versions:commit
 
-      - name: Commit and push version bump
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git checkout -b bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
-          git commit -am "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
-          git push origin bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
+      #- name: Commit and push version bump
+      #  run: |
+      #    git config user.name "github-actions"
+      #    git config user.email "github-actions@github.com"
+      #    git checkout -b bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
+      #    git commit -am "chore: bump version to ${{ steps.bump_version.outputs.NEXT_VERSION }} after release"
+      #    git push origin bump-version-${{ steps.bump_version.outputs.NEXT_VERSION }}-${{ github.run_number }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
