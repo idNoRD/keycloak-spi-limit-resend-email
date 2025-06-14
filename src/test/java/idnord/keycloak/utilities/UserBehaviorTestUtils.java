@@ -17,7 +17,6 @@ public class UserBehaviorTestUtils {
     private final static WebDriverManager wdm;
 
     private final String host = System.getProperty("test.host", "host.docker.internal");
-    //private final String host = System.getProperty("test.host", "172.17.0.1");
     private final KeycloakTestUtils kc;
 
     static {
@@ -36,7 +35,7 @@ public class UserBehaviorTestUtils {
         chromeOptions.addArguments("--disable-notifications");
 
         wdm = WebDriverManager.chromedriver().capabilities(chromeOptions)
-                .dockerExtraHosts("host.docker.internal:host-gateway") // adds an entry to the Docker container's /etc/hosts like host.docker.internal    172.17.0.1
+                .dockerExtraHosts("host.docker.internal:host-gateway") // gh ci needs an entry to the Docker container's /etc/hosts like host.docker.internal    172.17.0.1
                 //.enableVnc().enableRecording() // uncomment for demo purposes or manual testing
                 .browserInDocker();
     }
