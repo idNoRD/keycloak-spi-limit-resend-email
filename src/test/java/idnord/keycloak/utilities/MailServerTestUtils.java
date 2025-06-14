@@ -30,7 +30,10 @@ public class MailServerTestUtils {
 
     public void tearDown() {
         if (fakeSmtpServer != null) {
+            String tearingDownFakeSmtpServerPort = fakeSmtpServer.getMappedPort(1080).toString();
+            System.out.println("[START] Tearing down Mail Server " + tearingDownFakeSmtpServerPort);
             fakeSmtpServer.stop();
+            System.out.println("[END] Tearing down Mail Server " + tearingDownFakeSmtpServerPort);
         }
     }
 

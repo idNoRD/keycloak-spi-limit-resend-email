@@ -14,6 +14,8 @@ import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,6 +24,8 @@ public class KeycloakTestUtils {
 
     private final AtomicReference<Keycloak> kc = new AtomicReference<>();
     @Getter
+    private int kcHttpPort = 8080;
+    @Getter
     private final org.keycloak.admin.client.Keycloak adminClient;
 
     public KeycloakTestUtils() {
@@ -29,25 +33,33 @@ public class KeycloakTestUtils {
     }
 
     public KeycloakTestUtils(Map<String, String> envs) {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            kcHttpPort = socket.getLocalPort();
+        } catch (IOException e) {
+            System.out.println("Unable to get random available port, using port=" + kcHttpPort);
+        }
         envs.putIfAbsent("KC_BOOTSTRAP_ADMIN_USERNAME", "admin");
         envs.putIfAbsent("KC_BOOTSTRAP_ADMIN_PASSWORD", "admin");
+        System.out.println("Starting Keycloak on port=" + kcHttpPort);
         try {
             new EnvironmentVariables(envs).execute(() -> {
-                kc.set(Keycloak.builder().setVersion("26.2.5").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", "0.1.1-SNAPSHOT").start());
+                kc.set(Keycloak.builder().setVersion("26.2.5").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", "0.1.1-SNAPSHOT").start("start-dev", "--http-port=" + kcHttpPort));
             });
         } catch (Exception e) {
             System.out.println("Unable to start keycloak " + e.getMessage());
         }
 
-        adminClient = KeycloakBuilder.builder().serverUrl("http://localhost:8080").realm("master").clientId("admin-cli").grantType("password").username("admin").password("admin").build();
+        adminClient = KeycloakBuilder.builder().serverUrl("http://localhost:" + kcHttpPort).realm("master").clientId("admin-cli").grantType("password").username("admin").password("admin").build();
     }
 
     public void tearDown() {
+        System.out.println("[START] Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
         try {
             kc.get().stop();
         } catch (TimeoutException e) {
             System.out.println("Unable to gracefully stop keycloak " + e.getMessage());
         }
+        System.out.println("[END] Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
     }
 
     public KeycloakTestUtils configureSmtpViaAdminClient(String mailServerHost, String mailServerPort) {

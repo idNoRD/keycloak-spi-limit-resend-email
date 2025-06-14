@@ -28,14 +28,14 @@ public class EmailSendingTest {
                 .addListenerToEvents()
                 .configureSmtpViaAdminClient(ms.getMailServerHost(), ms.getMailServerPort())
                 .setUnmanagedAttributesPolicyToAdminOnly();
-        ub = new UserBehaviorTestUtils();
+        ub = new UserBehaviorTestUtils(kc);
     }
 
     @AfterEach
     void tearDown() {
         ub.tearDown();
-        kc.tearDown();
         ms.tearDown();
+        kc.tearDown();
     }
 
     @Test
