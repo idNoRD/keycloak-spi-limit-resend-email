@@ -17,7 +17,7 @@ public class UserBehaviorTestUtils {
     private final static WebDriverManager wdm;
 
     //private final String host = System.getProperty("test.host", "host.docker.internal");
-    private final String host = System.getProperty("test.host", "172.18.0.2");
+    private final String host = System.getProperty("test.host", "localhost");
     private final KeycloakTestUtils kc;
 
     static {
@@ -37,7 +37,8 @@ public class UserBehaviorTestUtils {
 
         wdm = WebDriverManager.chromedriver().capabilities(chromeOptions)
                 //.enableVnc().enableRecording() // uncomment for demo purposes or manual testing
-                .browserInDocker();
+                //.browserInDocker()
+                ;
     }
 
     public UserBehaviorTestUtils(KeycloakTestUtils kc) {
