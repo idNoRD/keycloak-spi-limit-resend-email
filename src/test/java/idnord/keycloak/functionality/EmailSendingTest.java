@@ -137,7 +137,7 @@ public class EmailSendingTest {
         }
         int emailCountAfterMaxAttempts = ms.getEmailCount().size();
         try {
-            assertTrue(ub.clickResend("Failed to send email", "/login-actions/required-action?execution=VERIFY_EMAIL"));
+            assertTrue(ub.clickResend("We are sorry", "/login-actions/required-action?execution=VERIFY_EMAIL"));
 
             int emailCountFromAttribute = Integer.parseInt(Optional.of(kc.getAttribute(userId, "LimitResendEmailCount")).orElse("0"));
             System.out.println("emailCountFromAttribute LimitResendEmailCount=" + emailCountFromAttribute);
