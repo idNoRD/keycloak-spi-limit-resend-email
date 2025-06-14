@@ -3,6 +3,8 @@ package idnord.keycloak.utilities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jetbrains.annotations.NotNull;
 import org.keycloak.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -31,6 +33,15 @@ public class KeycloakTestUtils {
     public KeycloakTestUtils() {
         this(new HashMap<String, String>());
     }
+    static String spiVersionFromPomXml;
+
+    static {
+        try {
+            spiVersionFromPomXml = new MavenXpp3Reader().read(new java.io.FileReader("pom.xml")).getVersion();
+        } catch (IOException | XmlPullParserException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public KeycloakTestUtils(Map<String, String> envs) {
         try (ServerSocket socket = new ServerSocket(0)) {
@@ -43,7 +54,7 @@ public class KeycloakTestUtils {
         System.out.println("Starting Keycloak on port=" + kcHttpPort);
         try {
             new EnvironmentVariables(envs).execute(() -> {
-                kc.set(Keycloak.builder().setVersion("26.2.5").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", "0.1.1-SNAPSHOT").start("start-dev", "--http-port=" + kcHttpPort));
+                kc.set(Keycloak.builder().setVersion("26.2.5").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", spiVersionFromPomXml).start("start-dev", "--http-port=" + kcHttpPort));
             });
         } catch (Exception e) {
             System.out.println("Unable to start keycloak " + e.getMessage());
