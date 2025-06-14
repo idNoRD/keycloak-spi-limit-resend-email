@@ -8,10 +8,12 @@ import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionFactory;
 import org.keycloak.authentication.RequiredActionProvider;
 import org.keycloak.authentication.requiredactions.VerifyEmail;
-import org.keycloak.events.EventBuilder;
+import org.keycloak.events.Details;
+import org.keycloak.events.Errors;
 import org.keycloak.events.EventType;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.UserModel;
+import org.keycloak.services.messages.Messages;
 
 import static idnord.keycloak.config.LimitResendEmailConfiguration.LIMIT_RESEND_EMAIL_MAX_RETRIES;
 import static idnord.keycloak.config.LimitResendEmailConfiguration.LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC;
@@ -60,14 +62,19 @@ public class CustomVerifyEmail extends VerifyEmail implements RequiredActionProv
     }
 
     private void handleReachedLimit(RequiredActionContext context, UserModel user) {
-        String email = context.getUser().getEmail();
-        EventBuilder event = context.getEvent().clone().event(EventType.SEND_VERIFY_EMAIL).detail("email", email);
-        event.clone().event(EventType.SEND_VERIFY_EMAIL).detail("reason", "Too many emails sent. Please wait before trying again.").user(user).error("email_send_failed");
+        context.getEvent().clone().event(EventType.SEND_VERIFY_EMAIL)
+                .detail(Details.REASON, "Too many emails sent. Please wait before trying again.")
+                .user(user)
+                .error(Errors.EMAIL_SEND_FAILED);
+
         log.info("Email sending limited for username={}, clientId={}, IP={}.",
                 user.getUsername(), context.getAuthenticationSession().getClient().getClientId(), context.getSession().getContext().getConnection().getRemoteAddr());
 
-        context.failure("emailSendErrorMessage");
-        context.challenge(context.form().setError("emailSendErrorMessage", new Object[0]).createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
+        context.challenge(
+                context.form()
+                        .setError(user.isEmailVerified() ? Messages.EMAIL_SENT_ERROR : Messages.VERIFY_EMAIL)
+                        .createErrorPage(Response.Status.TOO_MANY_REQUESTS)
+        );
     }
 
 }
