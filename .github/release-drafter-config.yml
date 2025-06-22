@@ -90,15 +90,4 @@ template: |
 
   ## Install & Upgrade
 
-  - To install or upgrade the keycloak-spi-limit-resend-email:
-    - copy jar into /opt/keycloak/providers/
-    - run `/bin/kc.sh build`
-    - restart keycloak
-  - To configure:
-    - Copy "Reset credentials flow" and add into it the "LimitResendEmail Authenticator" ("Required") before "Send Resend Email"
-    - Open copied "Reset credentials flow" and bind with "Reset credentials flow"
-    - Realm Settings -> Events -> Event listeners -> add limit-resend-email-event
-    - Authentication -> Required actions -> Ensure that "Verify Email" is enabled and set default action is On
-  - To adjust you can pass these environment variables to keycloak
-    - KEYCLOAK_LIMIT_RESEND_EMAIL_MAX_RETRIES = 3
-    - KEYCLOAK_LIMIT_RESEND_EMAIL_RETRY_BLOCK_DURATION_IN_SEC = 3600
+  - To install or upgrade the `keycloak-spi-limit-resend-email`, just follow the 🛠 [Installation section from the README](README.md#-installation).
