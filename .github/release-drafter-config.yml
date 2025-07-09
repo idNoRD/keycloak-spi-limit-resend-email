@@ -82,7 +82,7 @@ autolabeler:
       - "/.+\\sto\\sv.+"
   - label: changelog
     title:
-      - "/[create-pull-request] automated change/i"
+      - "/^[create-pull-request].*:/i"
 #replacers:
 #  - search: "/[^:]*(\\w+)(\\(\\w+\\))?!?: /g"
 #    replace: ""
