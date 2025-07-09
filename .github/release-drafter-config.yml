@@ -80,6 +80,9 @@ autolabeler:
   - label: dependencies
     title:
       - "/.+\\sto\\sv.+"
+  - label: changelog
+    title:
+      - "/[create-pull-request] automated change/i"
 #replacers:
 #  - search: "/[^:]*(\\w+)(\\(\\w+\\))?!?: /g"
 #    replace: ""
