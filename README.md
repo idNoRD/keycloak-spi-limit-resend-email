@@ -3,7 +3,7 @@
 [![Build & Test](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml/badge.svg)](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml)
 ![GitHub Maintained](https://img.shields.io/maintenance/yes/2025)
 ![GitHub License](https://img.shields.io/github/license/ironwolphern/ansible-role-certbot)
-[![Keycloak](https://img.shields.io/badge/Keycloak-26.3.1-blue)](https://github.com/keycloak/keycloak/releases)
+[![Keycloak](https://img.shields.io/badge/Keycloak-26.3.3-blue)](https://github.com/keycloak/keycloak/releases)
 ---
 Keycloak spi that 
 - limits resend email verification 
