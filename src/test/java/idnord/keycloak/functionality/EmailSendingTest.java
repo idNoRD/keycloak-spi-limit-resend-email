@@ -9,6 +9,7 @@ import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -114,6 +115,8 @@ public class EmailSendingTest {
 
         for (int i = 0; i < MAX_RETRIES - 1; i++) {
             try {
+                System.out.println("Starting from keycloak 26.4.0 user needs to wait 30 seconds before resending another email...");
+                Thread.sleep(Duration.ofSeconds(30));
 
                 assertTrue(ub.clickResend("Click here", "/login-actions/required-action?execution=VERIFY_EMAIL"));
                 expectedEmailSent += 1;
@@ -121,9 +124,6 @@ public class EmailSendingTest {
                 int emailCountFromAttribute = Integer.parseInt(Optional.of(kc.getAttribute(userId, "LimitResendEmailCount")).orElse("0"));
                 System.out.println("emailCountFromAttribute LimitResendEmailCount=" + emailCountFromAttribute);
                 assertEquals(expectedEmailSent, emailCountFromAttribute);
-
-                //System.out.println("Sleep5...");
-                //Thread.sleep(Duration.ofSeconds(i));
 
                 int emailCount = ms.getEmailCount().size();
                 System.out.println("Emails received by fake SMTP: " + emailCount);
@@ -137,6 +137,9 @@ public class EmailSendingTest {
         }
         int emailCountAfterMaxAttempts = ms.getEmailCount().size();
         try {
+            System.out.println("Starting from keycloak 26.4.0 user needs to wait 30 seconds before resending another email...");
+            Thread.sleep(Duration.ofSeconds(30));
+
             assertTrue(ub.clickResend("We are sorry", "/login-actions/required-action?execution=VERIFY_EMAIL"));
 
             int emailCountFromAttribute = Integer.parseInt(Optional.of(kc.getAttribute(userId, "LimitResendEmailCount")).orElse("0"));

@@ -54,7 +54,7 @@ public class KeycloakTestUtils {
         System.out.println("Starting Keycloak on port=" + kcHttpPort);
         try {
             new EnvironmentVariables(envs).execute(() -> {
-                kc.set(Keycloak.builder().setVersion("26.3.5").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", spiVersionFromPomXml).start("start-dev", "--http-port=" + kcHttpPort));
+                kc.set(Keycloak.builder().setVersion("26.4.0").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", spiVersionFromPomXml).start("start-dev", "--http-port=" + kcHttpPort));
             });
         } catch (Exception e) {
             System.out.println("Unable to start keycloak " + e.getMessage());
