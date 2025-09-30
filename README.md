@@ -3,7 +3,7 @@
 [![Build & Test](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml/badge.svg)](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml)
 ![GitHub Maintained](https://img.shields.io/maintenance/yes/2025)
 ![GitHub License](https://img.shields.io/github/license/ironwolphern/ansible-role-certbot)
-[![Keycloak](https://img.shields.io/badge/Keycloak-26.3.5-blue)](https://github.com/keycloak/keycloak/releases)
+[![Keycloak](https://img.shields.io/badge/Keycloak-26.4.0-blue)](https://github.com/keycloak/keycloak/releases)
 ---
 Keycloak spi that 
 - limits resend email verification 
@@ -13,10 +13,7 @@ Keycloak spi that
 ([#24914](https://github.com/keycloak/keycloak/issues/24914), 
 [#26182](https://github.com/keycloak/keycloak/issues/26182), 
 [#16574](https://github.com/keycloak/keycloak/issues/16574))
----
-## ⚠️ Notice:
-This repository is under active development. Use in production environments at your own risk.
-
+- limits email sending after each successful login with an unverified email
 ---
 
 ## 🛠 Installation
@@ -200,28 +197,31 @@ resource "keycloak_realm_user_profile" "userprofile" {
 ## ✨ Features
 
 ## Feature #1 (Forgot password protection):
-
+- **(Problem we solve):** The user can abuse the system by repeatedly triggering "Forgot password", spamming password reset emails.
 - After user registration, the Email Verification page is shown with a "Resend" link.  
   The user clicks "Resend" more than 3 times but does not open or confirm any of the emails.
-- **User then opens the Login page and clicks "Forgot password".**
-- **(Problem we solve):** The user can abuse the system by repeatedly triggering "Forgot password", spamming password reset emails.
+- **User then opens the Login page and clicks "Forgot password" again and again which leads to a spam**
 - **(Solution):** If more than 3 verification or forgot password emails were sent within the last hour and none were confirmed, an error is shown to temporarily block further emails.  
 
 ## Feature #2 (Login protection):
-
+**(Problem we solve):** A user can repeatedly log in to trigger email-verification emails without confirming any, leading to spam.
 - After registration, the user is shown the Email Verification page with a "Resend" link.  
   The user clicks "Resend" more than 3 times but does not confirm any of the emails.
 - **User then opens the Login page and enters the correct username and password.**
 - Keycloak redirects to the Verification page and sends a new email verification email.
-- **(Problem we solve):** The user can repeatedly log in to trigger email-verification emails without confirming any, leading to spam.
 - **(Solution):** If the limit is reached, the Verification page shows an error and no email is sent during 1 hour.
 [![Watch the video](https://img.youtube.com/vi/0jJc2Xn8FO0/maxresdefault.jpg)](https://youtu.be/0jJc2Xn8FO0)
 Click to Watch demo video ^
-## Feature #3 (Email verification page protection)
 
+## Feature #3 (Email verification page protection)
+### ❕️ Note:
+Starting from 26.4.0 Keycloak has a built-in feature [A configurable cooldown for email resend in VerifyEmail](https://github.com/keycloak/keycloak/commit/6958f57f0af7aac4213a5a8c2ed281542ea61478)
+> When validating an email address as a required action or an application initiated action, a user can resend the verification email by default only every 30 seconds, while in earlier versions there was no limitation in re-sending the email.  
+> Administrators can configure the interval per realm in the Verify Email required action in the Authentication section of the realmm.
+### but the cooldown doesn't limit the number of resends, and it does not block after limit is reached
+- **(Problem we solve):** The user can trigger excessive email-verification messages by repeatedly clicking "Resend" after each cooldown seconds.
 - After registration, the user is shown the Email Verification page with a "Resend" link.  
   The user clicks "Resend" more than 3 times without confirming any emails.
-- **(Problem we solve):** The user can trigger excessive email-verification messages by repeatedly clicking "Resend".
 - **(Solution):** If the resend limit is reached, the page shows an error and no email is sent during 1 hour.
 [![Watch the video](https://img.youtube.com/vi/QoAOQE7uvGE/maxresdefault.jpg)](https://youtu.be/QoAOQE7uvGE)
 Click to Watch demo video ^
