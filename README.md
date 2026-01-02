@@ -1,7 +1,7 @@
 # keycloak-spi-limit-resend-email
 [![jar](https://img.shields.io/github/v/tag/idNoRD/keycloak-spi-limit-resend-email?label=jar&logo=openjdk&logoColor=000000&labelColor=ED8B00)](https://github.com/idNoRD/keycloak-spi-limit-resend-email/releases/latest)
 [![Build & Test](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml/badge.svg)](https://github.com/idNoRD/keycloak-spi-limit-resend-email/actions/workflows/build.yml)
-![GitHub Maintained](https://img.shields.io/maintenance/yes/2025)
+![GitHub Maintained](https://img.shields.io/maintenance/yes/2026)
 ![GitHub License](https://img.shields.io/github/license/ironwolphern/ansible-role-certbot)
 [![Keycloak](https://img.shields.io/badge/Keycloak-26.4.0-blue)](https://github.com/keycloak/keycloak/releases)
 ---
