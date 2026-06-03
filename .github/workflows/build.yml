@@ -30,6 +30,8 @@ jobs:
 
       - name: Build with Maven
         run: |
-          DOCKER_HOST_IP=$(ip -4 addr show docker0 2>/dev/null \
-            | grep -oP '(?<=inet )\d+(\.\d+){3}' | head -1)
-          mvn -B --no-transfer-progress package ${DOCKER_HOST_IP:+-Dtest.host="$DOCKER_HOST_IP"}
+          DOCKER_HOST_IP=$(docker network inspect bridge \
+            -f '{{range .IPAM.Config}}{{.Gateway}}{{end}}' 2>/dev/null)
+          echo "Docker bridge gateway: '${DOCKER_HOST_IP}'"
+          mvn -B --no-transfer-progress package \
+            ${DOCKER_HOST_IP:+-Dtest.host="$DOCKER_HOST_IP"}
