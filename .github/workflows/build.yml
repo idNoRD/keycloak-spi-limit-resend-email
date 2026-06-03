@@ -32,8 +32,4 @@ jobs:
         run: |
           DOCKER_HOST_IP=$(ip -4 addr show docker0 2>/dev/null \
             | grep -oP '(?<=inet )\d+(\.\d+){3}' | head -1)
-          if [ -n "$DOCKER_HOST_IP" ]; then
-            mvn -B -q clean package -Dtest.host="$DOCKER_HOST_IP"
-          else
-            mvn -B -q clean package
-          fi
+          mvn -B clean package ${DOCKER_HOST_IP:+-Dtest.host="$DOCKER_HOST_IP"}
