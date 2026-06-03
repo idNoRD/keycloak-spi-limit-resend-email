@@ -307,6 +307,7 @@ public class Keycloak {
             this.addOptionIfNotSet(args, HttpOptions.HTTP_ENABLED, true);
             this.addOptionIfNotSet(args, HttpOptions.HTTP_PORT);
             this.addOptionIfNotSet(args, HttpOptions.HTTPS_PORT);
+            this.addOptionIfNotSet(args, HttpOptions.HTTP_HOST, "0.0.0.0");
             boolean isFipsEnabled = Optional.ofNullable(this.getOptionValue(args, SecurityOptions.FIPS_MODE))
                     .map(FipsMode::valueOfOption)
                     .orElse(FipsMode.DISABLED)

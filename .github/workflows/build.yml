@@ -26,12 +26,7 @@ jobs:
           cache: maven
 
       - name: Configure Docker networking for tests
-        run: sudo iptables -I INPUT -i docker0 -j ACCEPT || true
+        run: sudo iptables -I INPUT -s 172.16.0.0/12 -j ACCEPT || true
 
       - name: Build with Maven
-        run: |
-          DOCKER_HOST_IP=$(docker network inspect bridge \
-            -f '{{range .IPAM.Config}}{{.Gateway}}{{end}}' 2>/dev/null)
-          echo "Docker bridge gateway: '${DOCKER_HOST_IP}'"
-          mvn -B --no-transfer-progress package \
-            ${DOCKER_HOST_IP:+-Dtest.host="$DOCKER_HOST_IP"}
+        run: mvn -B --no-transfer-progress package
