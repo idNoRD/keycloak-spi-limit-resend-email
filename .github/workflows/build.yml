@@ -32,4 +32,4 @@ jobs:
         run: |
           DOCKER_HOST_IP=$(ip -4 addr show docker0 2>/dev/null \
             | grep -oP '(?<=inet )\d+(\.\d+){3}' | head -1)
-          mvn -B clean package ${DOCKER_HOST_IP:+-Dtest.host="$DOCKER_HOST_IP"}
+          mvn -B --no-transfer-progress package ${DOCKER_HOST_IP:+-Dtest.host="$DOCKER_HOST_IP"}
