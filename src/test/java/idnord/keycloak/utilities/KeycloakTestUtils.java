@@ -54,10 +54,11 @@ public class KeycloakTestUtils {
         System.out.println("Starting Keycloak on port=" + kcHttpPort);
         try {
             new EnvironmentVariables(envs).execute(() -> {
-                kc.set(Keycloak.builder().setVersion("26.5.4").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", spiVersionFromPomXml).start("start-dev", "--http-port=" + kcHttpPort));
+                kc.set(Keycloak.builder().setVersion("26.6.2").addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", spiVersionFromPomXml).start("start-dev", "--http-port=" + kcHttpPort));
             });
         } catch (Exception e) {
             System.out.println("Unable to start keycloak " + e.getMessage());
+            e.printStackTrace();
         }
 
         adminClient = KeycloakBuilder.builder().serverUrl("http://localhost:" + kcHttpPort).realm("master").clientId("admin-cli").grantType("password").username("admin").password("admin").build();
@@ -65,10 +66,16 @@ public class KeycloakTestUtils {
 
     public void tearDown() {
         System.out.println("[START] Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
-        try {
-            kc.get().stop();
-        } catch (TimeoutException e) {
-            System.out.println("Unable to gracefully stop keycloak " + e.getMessage());
+        Keycloak instance = kc.get();
+        if (instance != null) {
+            try {
+                instance.stop();
+            } catch (TimeoutException e) {
+                System.out.println("Unable to gracefully stop keycloak " + e.getMessage());
+            }
+        } else {
+            // start() failed before setting kc — still reset config for the next start attempt
+            org.keycloak.quarkus.runtime.configuration.Configuration.resetConfig();
         }
         System.out.println("[END] Tearing down Keycloak on kcHttpPort=" + kcHttpPort);
     }

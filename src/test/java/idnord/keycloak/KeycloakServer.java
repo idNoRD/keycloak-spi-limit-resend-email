@@ -17,7 +17,7 @@ public class KeycloakServer {
 
     public static void main(String[] args) {
         Keycloak kc = Keycloak.builder()
-                .setVersion("26.5.4")
+                .setVersion("26.6.2")
                 .addDependency("idnord.keycloak", "keycloak-spi-limit-resend-email", "0.1.1-SNAPSHOT")
                 .start(args);
     }
