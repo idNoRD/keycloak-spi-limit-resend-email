@@ -105,10 +105,12 @@
         <dependency>
             <groupId>org.apache.maven.resolver</groupId>
             <artifactId>maven-resolver-util</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-bootstrap-maven-resolver</artifactId>
+            <scope>test</scope>
         </dependency>
         <!-- Workaround for configuration validation errors when running the embedded server -->
         <dependency>
