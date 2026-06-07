@@ -3,7 +3,7 @@ version: '3'
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:26.6.2
+    image: quay.io/keycloak/keycloak:26.6.3
     container_name: keycloak
     deploy:
       resources:

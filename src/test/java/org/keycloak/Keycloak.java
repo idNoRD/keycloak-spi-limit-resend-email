@@ -41,9 +41,9 @@ import org.keycloak.quarkus.runtime.configuration.Configuration;
 import org.keycloak.quarkus.runtime.configuration.IgnoredArtifacts;
 
 /**
- * Patched version of org.keycloak.Keycloak from keycloak-junit5 26.6.2.
+ * Patched version of org.keycloak.Keycloak from keycloak-junit5.
  *
- * Adds Configuration.resetConfig() inside initSys() to work around a Keycloak 26.6.2 bug
+ * Adds Configuration.resetConfig() inside initSys() to work around a Keycloak bug
  * where bootstrap() triggers Configuration.getConfig() before initSys() calls initConfig(),
  * causing an IllegalStateException("Config should not be initialized until profile is determined").
  */
@@ -198,7 +198,7 @@ public class Keycloak {
 
     /**
      * Patched version: adds Configuration.resetConfig() before picocli.parseAndRun()
-     * to fix Keycloak 26.6.2 bug where bootstrap() initializes Configuration.config
+     * to fix Keycloak bug where bootstrap() initializes Configuration.config
      * before initSys() can check the profile.
      */
     public static boolean initSys(String... args) {
